@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog/1.9"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog/1.9
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-1.9.xsd">
+    <changeSet author="tgolding" id="1.2" dbms="postgresql">
+        <createTable tableName="expenses_tbl">
+            <column name="id" type="int" value="expenses_seq.nextval">
+                <constraints nullable="false" primaryKey="true" unique="true" />
+            </column>
+            <column name="expense_report_id" type="int">
+                <constraints nullable="false" />
+            </column>
+            <column name="description" type="varchar(255)">
+                <constraints nullable="false" unique="true" />
+            </column>
+            <column name="expense_date" type="date">
+                <constraints nullable="false" />
+            </column>
+            <column name="date_entered" type="date">
+                <constraints nullable="false" />
+            </column>
+            <column name="expense_type" type="varchar(20)">
+                <constraints nullable="false" />
+            </column>
+            <column name="attached_filename" type="varchar(128)">
+                <constraints nullable="false" />
+            </column>
+            <column name="status" type="blob">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+        <createSequence ordered="true"
+                        schemaName="brks_expenses"
+                        sequenceName="expenses_seq"
+                        startValue="100"/>
+    </changeSet>
+</databaseChangeLog>

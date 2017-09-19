@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog/1.9"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog/1.9
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-1.9.xsd">
+    <changeSet author="christian" id="1">
+        <sql endDelimiter=";">
+            CREATE SCHEMA brks_expenses
+        </sql>
+    </changeSet>
+    <changeSet author="tgolding" id="1.0" dbms="postgresql">
+        <createTable schemaName="brks_expenses" tableName="assignments_tbl">
+            <column name="id" type="int" value="assignments_seq.nextval">
+                <constraints nullable="false" primaryKey="true" unique="true" />
+            </column>
+            <column name="description" type="varchar(255)">
+                <constraints nullable="false" unique="true" />
+            </column>
+            <column name="start_date" type="date">
+                <constraints nullable="false" />
+            </column>
+            <column name="end_date" type="date">
+                <constraints nullable="true" />
+            </column>
+            <column name="status" type="varchar(10)">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+        <createSequence ordered="true"
+                        schemaName="brks_expenses"
+                        sequenceName="assignments_seq"
+                        startValue="100" />
+    </changeSet>
+</databaseChangeLog>
