@@ -8,6 +8,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.sql.Blob;
 import java.util.Date;
+import java.util.List;
 
 @Table(name = "expenses_tbl", schema = "brks_expenses")
 @Entity(name = "expense")
@@ -16,13 +17,12 @@ import java.util.Date;
 public class ExpenseEntity extends DescriptionEntity {
     @Getter
     @Setter
-    @NotNull
-    @ManyToOne
+    @ManyToMany
     @JoinTable(name = "expense_reports_expenses_tbl",
         joinColumns = @JoinColumn(name = "expense_report_id"),
         inverseJoinColumns = @JoinColumn(name = "expense_id")
     )
-    private ExpenseReportEntity expenseReport;
+    private List<ExpenseReportEntity> expenseReports;
 
     @Getter
     @Setter

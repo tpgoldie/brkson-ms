@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -27,8 +28,8 @@ public class ExpenseReportEntity extends DescriptionEntity {
 
     @Getter
     @Setter
-    @OneToMany(mappedBy = "expenseReport")
-    private List<ExpenseEntity> expenses;
+    @ManyToMany(mappedBy = "expenseReports")
+    private List<ExpenseEntity> expenses = new ArrayList<>();
 
     @Getter
     @Setter

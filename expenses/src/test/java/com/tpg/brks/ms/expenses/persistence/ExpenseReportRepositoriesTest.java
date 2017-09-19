@@ -2,6 +2,7 @@ package com.tpg.brks.ms.expenses.persistence;
 
 import com.tpg.brks.ms.expenses.persistence.entities.*;
 import com.tpg.brks.ms.expenses.persistence.repositories.AssignmentLifecycleRepository;
+import com.tpg.brks.ms.expenses.persistence.repositories.ExpenseLifecycleRepository;
 import com.tpg.brks.ms.expenses.persistence.repositories.ExpenseReportLifecycleRepository;
 import com.tpg.brks.ms.expenses.persistence.repositories.ExpenseReportQueryRepository;
 import com.tpg.brks.ms.utils.DateGeneration;
@@ -20,22 +21,22 @@ import java.util.List;
 import static java.util.Collections.singletonList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasProperty;
+import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.core.Is.is;
 
-@Ignore
 @RunWith(SpringRunner.class)
 @DataJpaTest
-public class ExpenseReportQueryRepositoryTest implements UniqueIdGeneration, DateGeneration, AssignmentFixture,
+public class ExpenseReportRepositoriesTest extends RepositoryTest implements UniqueIdGeneration, DateGeneration, AssignmentFixture,
         ExpenseReportFixture, ExpenseFixture {
-
-    @Autowired
-    private TestEntityManager entityManager;
 
     @Autowired
     private AssignmentLifecycleRepository assignmentLifecycleRepository;
 
     @Autowired
     private ExpenseReportLifecycleRepository expenseReportLifecycleRepository;
+
+    @Autowired
+    private ExpenseLifecycleRepository expenseLifecycleRepository;
 
     @Autowired
     private ExpenseReportQueryRepository expenseReportRepository;
@@ -54,11 +55,19 @@ public class ExpenseReportQueryRepositoryTest implements UniqueIdGeneration, Dat
     }
 
     private void thenActualReportMatchesExpectedReport(ExpenseReportEntity actualReport, ExpenseReportEntity expectedReport) {
-        assertThat(actualReport, hasProperty("id", is(expectedReport.getAssignment().getDescription())));
-        assertThat(actualReport.getAssignment().getDescription(), is(expectedReport.getAssignment().getDescription()));
+
+        assertThat(actualReport, hasProperty("id", is(expectedReport.getId())));
+
+        assertThat(actualReport.getAssignment(), hasProperty("description",
+                is(expectedReport.getAssignment().getDescription())));
+
+        assertThat(actualReport.getExpenses(), hasSize(1));
+        assertThat(actualReport.getExpenses().get(0),
+                hasProperty("id", is(expectedReport.getExpenses().get(0).getId())));
     }
 
     private AssignmentEntity givenAnAssignment() {
+
         Date startDate = generateDate(21,4,2017);
 
         AssignmentEntity assignment = anOpenAssignment("assignment 1", startDate);
@@ -67,13 +76,17 @@ public class ExpenseReportQueryRepositoryTest implements UniqueIdGeneration, Dat
     }
 
     private ExpenseReportEntity givenAnExpenseReport(AssignmentEntity assignment, List<ExpenseEntity> expenses) {
-        return anExpenseReport(assignment, expenses);
+        ExpenseReportEntity report = anExpenseReport(assignment, "report 1", expenses);
+
+        return expenseReportLifecycleRepository.save(report);
     }
 
     private ExpenseEntity givenAnExpense() {
         Date expenseDate = generateDate(10, 3, 2017);
 
-        return anExpense("lunch", expenseDate);
+        ExpenseEntity expense = anExpense("lunch", expenseDate, "PENDING", "SUBSISTENCE");
+
+        return expenseLifecycleRepository.save(expense);
     }
 
     private ExpenseReportEntity whenRequestingExpensesSummaryByAssignment(AssignmentEntity assignment) {
