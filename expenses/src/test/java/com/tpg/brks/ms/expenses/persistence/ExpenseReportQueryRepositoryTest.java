@@ -1,18 +1,14 @@
 package com.tpg.brks.ms.expenses.persistence;
 
 import com.tpg.brks.ms.expenses.persistence.entities.*;
-import com.tpg.brks.ms.expenses.persistence.repositories.AssignmentLifecycleRepository;
 import com.tpg.brks.ms.expenses.persistence.repositories.ExpenseLifecycleRepository;
 import com.tpg.brks.ms.expenses.persistence.repositories.ExpenseReportLifecycleRepository;
 import com.tpg.brks.ms.expenses.persistence.repositories.ExpenseReportQueryRepository;
-import com.tpg.brks.ms.utils.DateGeneration;
 import com.tpg.brks.ms.utils.UniqueIdGeneration;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Date;
@@ -26,11 +22,8 @@ import static org.hamcrest.core.Is.is;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
-public class ExpenseReportRepositoriesTest extends RepositoryTest implements UniqueIdGeneration, DateGeneration, AssignmentFixture,
-        ExpenseReportFixture, ExpenseFixture {
-
-    @Autowired
-    private AssignmentLifecycleRepository assignmentLifecycleRepository;
+public class ExpenseReportQueryRepositoryTest extends RepositoryTest implements UniqueIdGeneration, ExpenseReportFixture,
+        ExpenseFixture {
 
     @Autowired
     private ExpenseReportLifecycleRepository expenseReportLifecycleRepository;
@@ -43,7 +36,9 @@ public class ExpenseReportRepositoriesTest extends RepositoryTest implements Uni
 
     @Test
     public void whenRequestingExpensesSummaryByAssignment_anAssignment_thenAllExpenseReportsAreReturned() {
-        AssignmentEntity assignment = givenAnAssignment();
+        AccountEntity account = givenAnAccount();
+
+        AssignmentEntity assignment = givenAnAssignment(account);
 
         ExpenseEntity expense = givenAnExpense();
 
@@ -64,15 +59,6 @@ public class ExpenseReportRepositoriesTest extends RepositoryTest implements Uni
         assertThat(actualReport.getExpenses(), hasSize(1));
         assertThat(actualReport.getExpenses().get(0),
                 hasProperty("id", is(expectedReport.getExpenses().get(0).getId())));
-    }
-
-    private AssignmentEntity givenAnAssignment() {
-
-        Date startDate = generateDate(21,4,2017);
-
-        AssignmentEntity assignment = anOpenAssignment("assignment 1", startDate);
-
-        return assignmentLifecycleRepository.save(assignment);
     }
 
     private ExpenseReportEntity givenAnExpenseReport(AssignmentEntity assignment, List<ExpenseEntity> expenses) {

@@ -4,7 +4,6 @@ import com.tpg.brks.ms.expenses.domain.*;
 import com.tpg.brks.ms.expenses.web.BaseGivenTest;
 import com.tpg.brks.ms.expenses.web.model.WebApplicationUser;
 import com.tpg.brks.ms.expenses.web.model.WebApplicationUserFixture;
-import lombok.Builder;
 import lombok.Value;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -43,25 +42,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK,
-        classes = {ExpenseReportQueryControllerTest.TestConfig.class}, properties = {"spring.session.store-type=NONE"})
-public class ExpenseReportQueryControllerTest extends BaseGivenTest implements WebApplicationUserFixture {
-
-    @TestConfiguration
-    static class TestConfig implements WebApplicationUserFixture {
-        private UserDetailsService userDetailsService = new UserDetailsService() {
-            private Map<String, UserDetails> users = singletonList(johnDoeWebAppUser()).stream()
-                    .collect(toMap(WebApplicationUser::getUsername, user -> user));
-
-            @Override
-            public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-                return users.get(username);
-            }
-        };
-
-        @Bean
-        public UserDetailsService userDetailsService() { return userDetailsService; }
-    }
+public class ViewExpenseReportsTest extends BaseGivenTest implements WebApplicationUserFixture {
 
     @Captor
     private ArgumentCaptor<Account> accountArgumentCaptor;
@@ -87,10 +68,6 @@ public class ExpenseReportQueryControllerTest extends BaseGivenTest implements W
         ResultActions resultActions = whenSendRequestForViewingExpenseReports(webApplicationUser, account, assignment, expenseReports);
 
         thenExpectExpenseReportSummary(resultActions, webApplicationUser, account, assignment, period, expenseReports);
-    }
-
-    public WebApplicationUser givenAWebApplicationUser() {
-        return johnDoeWebAppUser();
     }
 
     private ResultActions whenSendRequestForViewingExpenseReports(WebApplicationUser webApplicationUser,

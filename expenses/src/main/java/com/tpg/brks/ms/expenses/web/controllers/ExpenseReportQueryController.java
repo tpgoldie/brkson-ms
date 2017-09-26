@@ -24,9 +24,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.xml.ws.Response;
 import java.util.List;
 import java.util.Optional;
 
+import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
@@ -49,22 +51,25 @@ public class ExpenseReportQueryController {
         this.assignmentQueryService = assignmentQueryService;
 
         this.expenseReportQueryService = expenseReportQueryService;
+
         this.accountQueryService = accountQueryService;
     }
 
     @GetMapping(value = "/expenseReports", produces = {APPLICATION_JSON_UTF8_VALUE})
     @Secured("ROLE_EXPENSE_USER")
     @PreAuthorize("authenticated")
-    public ResponseEntity<List<ExpenseReport>> getExpenseReports(@AuthenticationPrincipal  WebApplicationUser user) {
-        Account account = accountQueryService.findAccountByUsername(user.getUsername()).get();
+    public ResponseEntity<List<ExpenseReport>> handleExpenseReports(@AuthenticationPrincipal  WebApplicationUser user) {
+        Optional<Account> foundAccount = accountQueryService.findAccountByUsername(user.getUsername());
 
-        Assignment currentAssignment = assignmentQueryService.findCurrentAssignmentForAccount(account).get();
+        return foundAccount.map(this::getExpenseReports).orElse(ResponseEntity.notFound().build());
+    }
 
-        List<ExpenseReport> expenseReports = expenseReportQueryService.getExpenseReportsForAssignment(currentAssignment);
+    private ResponseEntity<List<ExpenseReport>> getExpenseReports(Account account) {
+        Optional<Assignment> foundAssignment = assignmentQueryService.findCurrentAssignmentForAccount(account);
 
-        ResponseEntity<List<ExpenseReport>> entity = ResponseEntity.ok(expenseReports);
+        List<ExpenseReport> expenseReports = expenseReportQueryService.getExpenseReportsForAssignment(foundAssignment.get());
 
-        return entity;
+        return ResponseEntity.ok(expenseReports);
     }
 
     @GetMapping(value = "/expenseReports/{reportId}", produces = {MediaTypes.HAL_JSON_VALUE})
