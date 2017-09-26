@@ -4,12 +4,10 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog/1.9
                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-1.9.xsd">
-    <changeSet author="christian" id="1">
+    <changeSet author="tgolding" id="1.0" dbms="postgresql">
         <sql endDelimiter=";">
             CREATE SCHEMA brks_expenses
         </sql>
-    </changeSet>
-    <changeSet author="tgolding" id="1.0" dbms="postgresql">
         <createTable schemaName="brks_expenses" tableName="assignments_tbl">
             <column name="id" type="int" value="assignments_seq.nextval">
                 <constraints nullable="false" primaryKey="true" unique="true" />

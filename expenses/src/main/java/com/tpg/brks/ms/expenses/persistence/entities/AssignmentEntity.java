@@ -18,6 +18,16 @@ public class AssignmentEntity extends DescriptionEntity {
     @Getter
     @Setter
     @NotNull
+    @ManyToOne
+    @JoinTable(name = "accounts_assignments_tbl",
+            joinColumns = @JoinColumn(name = "account_id"),
+            inverseJoinColumns = @JoinColumn(name = "assignment_id")
+    )
+    private AccountEntity account;
+
+    @Getter
+    @Setter
+    @NotNull
     @Column(name="start_date")
     private Date startDate;
 
