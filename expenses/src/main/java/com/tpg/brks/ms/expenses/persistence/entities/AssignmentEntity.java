@@ -38,7 +38,10 @@ public class AssignmentEntity extends DescriptionEntity {
 
     @Getter
     @Setter
-    private String status;
+    @NotNull
+    @Column(name = "assign_status")
+    @Enumerated(EnumType.STRING)
+    private AssignmentStatus status;
 
     @Getter
     @Setter

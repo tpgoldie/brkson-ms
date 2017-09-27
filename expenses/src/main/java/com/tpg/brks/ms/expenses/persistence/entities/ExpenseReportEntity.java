@@ -43,6 +43,9 @@ public class ExpenseReportEntity extends DescriptionEntity {
 
     @Getter
     @Setter
-    private String status;
+    @NotNull
+    @Column(name = "report_status")
+    @Enumerated(EnumType.STRING)
+    private ExpenseReportStatus status;
 
 }

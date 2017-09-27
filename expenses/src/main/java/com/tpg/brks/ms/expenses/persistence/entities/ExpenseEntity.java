@@ -38,12 +38,15 @@ public class ExpenseEntity extends DescriptionEntity {
     @Setter
     @NotNull
     @Column(name = "expense_type")
-    private String expenseType;
+    @Convert(converter = ExpenseTypeConverter.class)
+    private ExpenseType expenseType;
 
     @Getter
     @Setter
     @NotNull
-    private String status;
+    @Column(name = "expense_status")
+    @Enumerated(EnumType.STRING)
+    private ExpenseStatus status;
 
     @Getter
     @Setter

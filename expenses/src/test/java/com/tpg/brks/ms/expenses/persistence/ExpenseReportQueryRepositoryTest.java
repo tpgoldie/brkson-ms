@@ -14,6 +14,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.util.Date;
 import java.util.List;
 
+import static com.tpg.brks.ms.expenses.persistence.entities.ExpenseStatus.PENDING;
+import static com.tpg.brks.ms.expenses.persistence.entities.ExpenseType.SUBSISTENCE;
 import static java.util.Collections.singletonList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasProperty;
@@ -70,7 +72,7 @@ public class ExpenseReportQueryRepositoryTest extends RepositoryTest implements 
     private ExpenseEntity givenAnExpense() {
         Date expenseDate = generateDate(10, 3, 2017);
 
-        ExpenseEntity expense = anExpense("lunch", expenseDate, "PENDING", "SUBSISTENCE");
+        ExpenseEntity expense = anExpense("lunch", expenseDate, PENDING, SUBSISTENCE);
 
         return expenseLifecycleRepository.save(expense);
     }

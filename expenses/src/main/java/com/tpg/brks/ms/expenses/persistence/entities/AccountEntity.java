@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 
@@ -31,7 +32,9 @@ public class AccountEntity extends BaseEntity {
     @Getter
     @Setter
     @Column(name="account_status")
-    private String status;
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private AccountStatus status;
 
     @Getter
     @Setter

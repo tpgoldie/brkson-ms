@@ -21,7 +21,7 @@
             <column name="period_end" type="date">
                 <constraints nullable="false" />
             </column>
-            <column name="status" type="varchar(10)">
+            <column name="report_status" type="varchar(10)">
                 <constraints nullable="false" />
             </column>
         </createTable>
