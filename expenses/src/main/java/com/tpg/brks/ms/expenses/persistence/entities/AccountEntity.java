@@ -17,13 +17,12 @@ import java.util.List;
 public class AccountEntity extends BaseEntity {
     @Getter
     @Setter
-    @Column(name="first_name")
-    private String firstName;
-
-    @Getter
-    @Setter
-    @Column(name="last_name")
-    private String lastName;
+    @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name="firstName", column=@Column(name="first_name")),
+            @AttributeOverride(name="lastName", column=@Column(name="last_name"))
+    })
+    private Name name;
 
     @Getter
     @Setter

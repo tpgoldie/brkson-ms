@@ -10,11 +10,15 @@ public interface ExpenseReportFixture {
     default ExpenseReportEntity anExpenseReport(AssignmentEntity assignment, String descripton, List<ExpenseEntity> expenses) {
         List<ExpenseEntity> sortedExpenses = expenses.stream().sorted(Comparator.comparing(ExpenseEntity::getExpenseDate)).collect(Collectors.toList());
 
+        Period period = new Period();
+
+        period.setStartDate(sortedExpenses.get(0).getExpenseDate());
+        period.setEndDate(sortedExpenses.get(sortedExpenses.size() - 1).getExpenseDate());
+
         ExpenseReportEntity entity = ExpenseReportEntity.builder()
             .assignment(assignment)
             .expenses(expenses)
-            .periodStart(sortedExpenses.get(0).getExpenseDate())
-            .periodEnd(sortedExpenses.get(sortedExpenses.size() - 1).getExpenseDate())
+            .period(period)
             .status(OPEN)
             .build();
 

@@ -33,10 +33,10 @@ public class ExpenseReportQueryServiceImpl implements ExpenseReportQueryService,
         typeMap = modelMapper.createTypeMap(ExpenseReportEntity.class, ExpenseReport.class);
 
         typeMap.addMappings(modelMapper -> modelMapper.using(dateToStringConverter)
-                .map(ExpenseReportEntity::getPeriodStart, ExpenseReport::setPeriodStart));
+                .map(src -> src.getPeriod().getStartDate(), ExpenseReport::setPeriodStart));
 
         typeMap.addMappings(modelMapper -> modelMapper.using(dateToStringConverter)
-                .map(ExpenseReportEntity::getPeriodEnd, ExpenseReport::setPeriodEnd));
+                .map(src -> src.getPeriod().getEndDate(), ExpenseReport::setPeriodEnd));
     }
 
     @Override

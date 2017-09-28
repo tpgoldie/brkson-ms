@@ -54,8 +54,10 @@ public class ExpenseReportQueryServiceImplTest implements Given {
         assertThat(actual, hasProperty("id", is(expenseReportEntity.getId())));
         assertThat(actual, hasProperty("description", is(expenseReportEntity.getDescription())));
         assertThat(actual, hasProperty("status", is(expenseReportEntity.getStatus())));
-        assertThat(actual, hasProperty("periodStart", is(toDdMmYyyyFormat(expenseReportEntity.getPeriodStart()))));
-        assertThat(actual, hasProperty("periodEnd", is(toDdMmYyyyFormat(expenseReportEntity.getPeriodEnd()))));
+        assertThat(actual, hasProperty("periodStart",
+            is(toDdMmYyyyFormat(expenseReportEntity.getPeriod().getStartDate()))));
+        assertThat(actual, hasProperty("periodEnd",
+            is(toDdMmYyyyFormat(expenseReportEntity.getPeriod().getEndDate()))));
     }
 
     private List<ExpenseReport> whenRequestingAnExpenseReportByAssignment(AssignmentEntity assignment, ExpenseReportEntity expenseReport) {

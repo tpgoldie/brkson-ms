@@ -15,10 +15,10 @@ import java.util.List;
 @Table(name = "expense_reports_tbl", schema = "brks_expenses")
 @Entity(name = "expenseReport")
 @Builder
+@Getter
+@Setter
 @SequenceGenerator( name = "seq_generator", sequenceName = "expense_reports_seq" )
 public class ExpenseReportEntity extends DescriptionEntity {
-    @Getter
-    @Setter
     @NotNull
     @ManyToOne
     @JoinTable(name = "assignments_expense_reports_tbl",
@@ -27,26 +27,19 @@ public class ExpenseReportEntity extends DescriptionEntity {
     )
     private AssignmentEntity assignment;
 
-    @Getter
-    @Setter
     @ManyToMany(mappedBy = "expenseReports")
     private List<ExpenseEntity> expenses = new ArrayList<>();
 
-    @Getter
-    @Setter
-    @Column(name= "period_start")
-    private Date periodStart;
 
-    @Getter
-    @Setter
-    @Column(name = "period_end")
-    private Date periodEnd;
+    @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name="startDate", column=@Column(name="period_start")),
+            @AttributeOverride(name="endDate", column=@Column(name="period_end"))
+    })
+    private Period period;
 
-    @Getter
-    @Setter
     @NotNull
     @Column(name = "report_status")
     @Enumerated(EnumType.STRING)
     private ExpenseReportStatus status;
-
 }
