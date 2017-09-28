@@ -10,6 +10,8 @@ import java.util.Date;
 @Value
 @Builder
 public class Assignment {
+    private Long id;
+
     @NonNull
     @NotNull
     private Account account;
@@ -20,5 +22,5 @@ public class Assignment {
 
     private Date endDate;
 
-    private String status;
+    private AssignmentStatus status;
 }

@@ -1,12 +1,14 @@
 package com.tpg.brks.ms.expenses.persistence.entities;
 
 
+import com.tpg.brks.ms.expenses.domain.ExpenseType;
+
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
 import java.util.Arrays;
 import java.util.Optional;
 
-import static com.tpg.brks.ms.expenses.persistence.entities.ExpenseType.NOT_DEFINED;
+import static com.tpg.brks.ms.expenses.domain.ExpenseType.NOT_DEFINED;
 
 @Converter
 public class ExpenseTypeConverter implements AttributeConverter<ExpenseType, String> {

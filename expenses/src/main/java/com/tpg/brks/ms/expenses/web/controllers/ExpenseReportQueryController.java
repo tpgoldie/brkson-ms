@@ -67,7 +67,7 @@ public class ExpenseReportQueryController {
     private ResponseEntity<List<ExpenseReport>> getExpenseReports(Account account) {
         Optional<Assignment> foundAssignment = assignmentQueryService.findCurrentAssignmentForAccount(account);
 
-        List<ExpenseReport> expenseReports = expenseReportQueryService.getExpenseReportsForAssignment(foundAssignment.get());
+        List<ExpenseReport> expenseReports = expenseReportQueryService.getExpenseReportsForAssignment(foundAssignment.get().getId());
 
         return ResponseEntity.ok(expenseReports);
     }

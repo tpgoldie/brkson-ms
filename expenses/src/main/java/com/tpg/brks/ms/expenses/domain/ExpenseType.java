@@ -1,4 +1,4 @@
-package com.tpg.brks.ms.expenses.persistence.entities;
+package com.tpg.brks.ms.expenses.domain;
 
 import lombok.Getter;
 

@@ -1,5 +1,6 @@
 package com.tpg.brks.ms.expenses.persistence.entities;
 
+import com.tpg.brks.ms.expenses.domain.AssignmentStatus;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;

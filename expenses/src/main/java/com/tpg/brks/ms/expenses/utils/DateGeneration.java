@@ -1,4 +1,4 @@
-package com.tpg.brks.ms.utils;
+package com.tpg.brks.ms.expenses.utils;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;

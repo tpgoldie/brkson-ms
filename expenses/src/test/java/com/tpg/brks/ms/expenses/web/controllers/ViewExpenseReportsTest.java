@@ -30,6 +30,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
+import static org.mockito.Matchers.anyLong;
 import static org.mockito.Matchers.isA;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -79,7 +80,7 @@ public class ViewExpenseReportsTest extends BaseGivenTest implements WebApplicat
 
         when(assignmentQueryService.findCurrentAssignmentForAccount(isA(Account.class))).thenReturn(Optional.of(assignment));
 
-        when(expenseReportQueryService.getExpenseReportsForAssignment(isA(Assignment.class))).thenReturn(expenseReports);
+        when(expenseReportQueryService.getExpenseReportsForAssignment(assignment.getId())).thenReturn(expenseReports);
 
         return mockMvc.perform(get("/expenseReports")
                 .with(user(webApplicationUser))
@@ -104,7 +105,7 @@ public class ViewExpenseReportsTest extends BaseGivenTest implements WebApplicat
                 .andExpect(jsonPath("$[0].description", is(expenseReports.get(0).getDescription())))
                 .andExpect(jsonPath("$[0].periodStart", is(period.getPeriodStart())))
                 .andExpect(jsonPath("$[0].periodEnd", is(period.getPeriodEnd())))
-                .andExpect(jsonPath("$[0].status", is(expenseReports.get(0).getStatus())));
+                .andExpect(jsonPath("$[0].status", is(expenseReports.get(0).getStatus().name())));
 
         verifyAccountQuery(expectedAccount);
 
@@ -122,11 +123,7 @@ public class ViewExpenseReportsTest extends BaseGivenTest implements WebApplicat
     }
 
     private void verifyAssignmentQuery(Assignment expectedAssignment) {
-        verify(expenseReportQueryService).getExpenseReportsForAssignment(assignmentArgumentCaptor.capture());
-
-        Assignment actualAssignment = assignmentArgumentCaptor.getValue();
-
-        assertThat(actualAssignment, is(expectedAssignment));
+        verify(expenseReportQueryService).getExpenseReportsForAssignment(expectedAssignment.getId());
     }
 
     @Value

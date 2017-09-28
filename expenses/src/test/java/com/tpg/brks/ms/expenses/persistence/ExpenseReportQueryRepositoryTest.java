@@ -14,8 +14,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.util.Date;
 import java.util.List;
 
-import static com.tpg.brks.ms.expenses.persistence.entities.ExpenseStatus.PENDING;
-import static com.tpg.brks.ms.expenses.persistence.entities.ExpenseType.SUBSISTENCE;
+import static com.tpg.brks.ms.expenses.domain.ExpenseStatus.PENDING;
+import static com.tpg.brks.ms.expenses.domain.ExpenseType.SUBSISTENCE;
 import static java.util.Collections.singletonList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasProperty;
@@ -37,7 +37,7 @@ public class ExpenseReportQueryRepositoryTest extends RepositoryTest implements 
     private ExpenseReportQueryRepository expenseReportRepository;
 
     @Test
-    public void whenRequestingExpensesSummaryByAssignment_anAssignment_thenAllExpenseReportsAreReturned() {
+    public void whenRequestingExpenseReportsByAssignment_anAssignment_thenAllExpenseReportsAreReturned() {
         AccountEntity account = givenAnAccount();
 
         AssignmentEntity assignment = givenAnAssignment(account);
@@ -46,12 +46,16 @@ public class ExpenseReportQueryRepositoryTest extends RepositoryTest implements 
 
         ExpenseReportEntity expectedReport = givenAnExpenseReport(assignment, singletonList(expense));
 
-        ExpenseReportEntity actualReport = whenRequestingExpensesSummaryByAssignment(assignment);
+        List<ExpenseReportEntity> actualReports = whenRequestingExpenseReportsByAssignment(assignment);
 
-        thenActualReportMatchesExpectedReport(actualReport, expectedReport);
+        thenActualReportMatchesExpectedReport(actualReports, expectedReport);
     }
 
-    private void thenActualReportMatchesExpectedReport(ExpenseReportEntity actualReport, ExpenseReportEntity expectedReport) {
+    private void thenActualReportMatchesExpectedReport(List<ExpenseReportEntity> actualReports, ExpenseReportEntity expectedReport) {
+
+        assertThat(actualReports, hasSize(1));
+
+        ExpenseReportEntity actualReport = actualReports.get(0);
 
         assertThat(actualReport, hasProperty("id", is(expectedReport.getId())));
 
@@ -64,6 +68,7 @@ public class ExpenseReportQueryRepositoryTest extends RepositoryTest implements 
     }
 
     private ExpenseReportEntity givenAnExpenseReport(AssignmentEntity assignment, List<ExpenseEntity> expenses) {
+
         ExpenseReportEntity report = anExpenseReport(assignment, "report 1", expenses);
 
         return expenseReportLifecycleRepository.save(report);
@@ -77,7 +82,7 @@ public class ExpenseReportQueryRepositoryTest extends RepositoryTest implements 
         return expenseLifecycleRepository.save(expense);
     }
 
-    private ExpenseReportEntity whenRequestingExpensesSummaryByAssignment(AssignmentEntity assignment) {
-        return expenseReportRepository.findByAssignmentId(assignment.getId()).get();
+    private List<ExpenseReportEntity> whenRequestingExpenseReportsByAssignment(AssignmentEntity assignment) {
+        return expenseReportRepository.findByAssignmentId(assignment.getId());
     }
 }

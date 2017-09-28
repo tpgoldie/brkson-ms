@@ -1,13 +1,25 @@
 package com.tpg.brks.ms.expenses.domain;
 
+import com.tpg.brks.ms.expenses.utils.DateGeneration;
+
 import java.util.Date;
 import java.util.List;
 
-public interface Given {
+import static java.util.Collections.singletonList;
 
-    Account givenAnAccount();
+public interface Given extends DateGeneration, AccountFixture, AssignmentFixture, ExpenseReportFixture {
+    Long ID = 101L;
 
-    Assignment givenAnAssignment(Account account);
+    default Account givenAnAccount() {
+        return johnDoeAccount();
+    }
 
-    List<ExpenseReport> givenExpenseReports(Assignment assignment, Date periodStart, Date periodEnd);
+    default Assignment givenAnAssignment(Account account) {
+        return anOpenAssignment(account, ID,"Assignment 1", generateDate(15, 4, 2016),
+                generateDate(15, 4, 2017));
+    }
+
+    default List<ExpenseReport> givenExpenseReports(Assignment assignment, Date periodStart, Date periodEnd) {
+        return singletonList(aPendingExpenseReport(assignment, ID, "report 1", periodStart, periodEnd));
+    }
 }

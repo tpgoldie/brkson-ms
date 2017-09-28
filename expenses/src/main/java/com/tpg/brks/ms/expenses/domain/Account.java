@@ -13,5 +13,5 @@ public class Account {
 
     private String username;
 
-    private String status;
+    private AccountStatus status;
 }

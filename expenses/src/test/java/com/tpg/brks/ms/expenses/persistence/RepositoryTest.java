@@ -7,7 +7,7 @@ import com.tpg.brks.ms.expenses.persistence.entities.AssignmentEntity;
 import com.tpg.brks.ms.expenses.persistence.entities.AssignmentFixture;
 import com.tpg.brks.ms.expenses.persistence.repositories.AccountLifecycleRepository;
 import com.tpg.brks.ms.expenses.persistence.repositories.AssignmentLifecycleRepository;
-import com.tpg.brks.ms.utils.DateGeneration;
+import com.tpg.brks.ms.expenses.utils.DateGeneration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.ActiveProfiles;

@@ -1,9 +1,10 @@
 package com.tpg.brks.ms.expenses.persistence.entities;
 
+import com.tpg.brks.ms.expenses.domain.ExpenseType;
 import org.junit.Test;
 
-import static com.tpg.brks.ms.expenses.persistence.entities.ExpenseType.NOT_DEFINED;
-import static com.tpg.brks.ms.expenses.persistence.entities.ExpenseType.TRAINING;
+import static com.tpg.brks.ms.expenses.domain.ExpenseType.NOT_DEFINED;
+import static com.tpg.brks.ms.expenses.domain.ExpenseType.TRAINING;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 

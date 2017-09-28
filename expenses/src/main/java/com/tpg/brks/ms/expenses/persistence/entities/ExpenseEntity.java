@@ -1,5 +1,7 @@
 package com.tpg.brks.ms.expenses.persistence.entities;
 
+import com.tpg.brks.ms.expenses.domain.ExpenseStatus;
+import com.tpg.brks.ms.expenses.domain.ExpenseType;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
