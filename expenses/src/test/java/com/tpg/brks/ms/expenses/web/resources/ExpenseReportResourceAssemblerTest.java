@@ -50,7 +50,7 @@ public class ExpenseReportResourceAssemblerTest extends BaseGivenTest {
         assertThat(actualResource.getLinks(), hasSize(1));
 
         assertThat(actualResource.getLinks().get(0), hasProperty("rel",
-                is("expenseReports")));
+                is("self")));
 
         assertThat(actualResource, hasProperty("expenseReportId",
                 is(expectedExpenseReport.getId())));
@@ -62,6 +62,6 @@ public class ExpenseReportResourceAssemblerTest extends BaseGivenTest {
                 is(expectedExpenseReport.getPeriodEnd())));
 
         assertThat(actualResource, hasProperty("status",
-                is(expectedExpenseReport.getStatus())));
+                is(expectedExpenseReport.getStatus().name())));
     }
 }

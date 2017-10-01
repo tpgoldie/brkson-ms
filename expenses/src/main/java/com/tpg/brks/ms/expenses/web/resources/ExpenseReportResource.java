@@ -1,11 +1,11 @@
 package com.tpg.brks.ms.expenses.web.resources;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.tpg.brks.ms.expenses.utils.DateGeneration;
 import com.tpg.brks.ms.expenses.web.controllers.ExpenseReportQueryController;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.codehaus.jackson.annotate.JsonCreator;
 import org.springframework.hateoas.ResourceSupport;
 import org.springframework.hateoas.core.Relation;
 

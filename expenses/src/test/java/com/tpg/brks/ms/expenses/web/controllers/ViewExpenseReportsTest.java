@@ -1,36 +1,9 @@
 package com.tpg.brks.ms.expenses.web.controllers;
 
-import com.tpg.brks.ms.expenses.domain.*;
-import com.tpg.brks.ms.expenses.web.BaseGivenTest;
-import com.tpg.brks.ms.expenses.web.model.WebApplicationUser;
-import com.tpg.brks.ms.expenses.web.model.WebApplicationUserFixture;
-import lombok.Value;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.context.annotation.Bean;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.test.context.support.WithUserDetails;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.web.servlet.ResultActions;
-
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-
-import static java.util.Collections.singletonList;
-import static java.util.stream.Collectors.toMap;
+import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
-import static org.mockito.Matchers.anyLong;
 import static org.mockito.Matchers.isA;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -41,6 +14,27 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
+import org.springframework.security.test.context.support.WithUserDetails;
+import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.web.servlet.ResultActions;
+
+import com.tpg.brks.ms.expenses.domain.Account;
+import com.tpg.brks.ms.expenses.domain.Assignment;
+import com.tpg.brks.ms.expenses.domain.ExpenseReport;
+import com.tpg.brks.ms.expenses.web.BaseGivenTest;
+import com.tpg.brks.ms.expenses.web.model.WebApplicationUser;
+import com.tpg.brks.ms.expenses.web.model.WebApplicationUserFixture;
+
+import lombok.Value;
 
 @RunWith(SpringRunner.class)
 public class ViewExpenseReportsTest extends BaseGivenTest implements WebApplicationUserFixture {
@@ -101,7 +95,7 @@ public class ViewExpenseReportsTest extends BaseGivenTest implements WebApplicat
                     .withUsername(webApplicationUser.getUsername())
                     .withRoles("EXPENSE_USER"))
                 .andExpect(jsonPath("$", hasSize(1)))
-                .andExpect(jsonPath("$[0].id", is(expenseReports.get(0).getId().intValue())))
+                .andExpect(jsonPath("$[0].expenseReportId", is(expenseReports.get(0).getId().intValue())))
                 .andExpect(jsonPath("$[0].description", is(expenseReports.get(0).getDescription())))
                 .andExpect(jsonPath("$[0].periodStart", is(period.getPeriodStart())))
                 .andExpect(jsonPath("$[0].periodEnd", is(period.getPeriodEnd())))

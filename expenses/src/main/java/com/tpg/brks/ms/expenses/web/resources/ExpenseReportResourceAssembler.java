@@ -19,7 +19,7 @@ public class ExpenseReportResourceAssembler extends ResourceAssemblerSupport<Exp
         ExpenseReportResource resource = modelMapper.map(report, ExpenseReportResource.class);
 
         resource.add(linkTo(ExpenseReportQueryController.class)
-                .slash("expenseReport").slash(report.getId())
+                .slash("expenseReports").slash(report.getId())
                 .withSelfRel());
 
         return resource;
