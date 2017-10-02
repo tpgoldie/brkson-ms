@@ -1,6 +1,10 @@
 package com.tpg.brks.ms.expenses.web.controllers;
 
 import static java.util.Optional.empty;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.hasProperty;
+import static org.hamcrest.Matchers.is;
+import static org.mockito.Matchers.isA;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8;
@@ -12,6 +16,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -21,10 +27,16 @@ import com.tpg.brks.ms.expenses.domain.Account;
 import com.tpg.brks.ms.expenses.web.BaseGivenTest;
 import com.tpg.brks.ms.expenses.web.model.WebApplicationUser;
 
+import java.util.Optional;
+
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK,
         classes = {BaseGivenTest.TestConfig.class}, properties = {"spring.session.store-type=NONE"})
 public class NoAssignmentFoundTest extends BaseGivenTest {
+
+    @Captor
+    private ArgumentCaptor<Account> accountArgumentCaptor;
+
     @Test
     @WithUserDetails(value = "jdoe")
     public void handleViewExpensesRequest_getRequest_shouldReturnExpenseReportSummary() throws Exception {
@@ -34,13 +46,14 @@ public class NoAssignmentFoundTest extends BaseGivenTest {
         
         ResultActions resultActions = whenSendRequestForViewingExpenseReports(webApplicationUser, account);
 
-        thenResponseIsNotFound(resultActions, webApplicationUser);
+        thenResponseIsNotFound(resultActions, webApplicationUser, account);
     }
 
     private ResultActions whenSendRequestForViewingExpenseReports(WebApplicationUser webApplicationUser, 
     		Account account) throws Exception {
-        
-    	when(assignmentQueryService.findCurrentAssignmentForAccount(account)).thenReturn(empty());
+        when(accountQueryService.findAccountByUsername(webApplicationUser.getUsername())).thenReturn(Optional.of(account));
+
+    	when(assignmentQueryService.findCurrentAssignmentForAccount(isA(Account.class))).thenReturn(empty());
 
         return mockMvc.perform(get("/expenseReports")
                 .with(user(webApplicationUser))
@@ -49,7 +62,8 @@ public class NoAssignmentFoundTest extends BaseGivenTest {
                 .andDo(print());
     }
 
-    private void thenResponseIsNotFound(ResultActions resultActions, WebApplicationUser webApplicationUser) throws Exception {
+    private void thenResponseIsNotFound(ResultActions resultActions, WebApplicationUser webApplicationUser,
+                                        Account expectedAccount) throws Exception {
         resultActions
             .andExpect(status().isNotFound())
             .andExpect(authenticated()
@@ -57,6 +71,13 @@ public class NoAssignmentFoundTest extends BaseGivenTest {
                 .withRoles("EXPENSE_USER"));
 
         verify(accountQueryService).findAccountByUsername(webApplicationUser.getUsername());
+        verify(assignmentQueryService).findCurrentAssignmentForAccount(accountArgumentCaptor.capture());
+
+        Account actualAccount = accountArgumentCaptor.getValue();
+
+        assertThat(actualAccount, hasProperty("username", is(expectedAccount.getUsername())));
+        assertThat(actualAccount, hasProperty("firstName", is(expectedAccount.getFirstName())));
+        assertThat(actualAccount, hasProperty("lastName", is(expectedAccount.getLastName())));
     }
    
 }
