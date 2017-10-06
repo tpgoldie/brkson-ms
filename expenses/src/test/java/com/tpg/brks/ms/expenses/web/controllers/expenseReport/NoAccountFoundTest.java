@@ -1,30 +1,21 @@
-package com.tpg.brks.ms.expenses.web.controllers;
+package com.tpg.brks.ms.expenses.web.controllers.expenseReport;
 
-import com.tpg.brks.ms.expenses.web.BaseGivenTest;
 import com.tpg.brks.ms.expenses.web.model.WebApplicationUser;
-import com.tpg.brks.ms.expenses.web.model.WebApplicationUserFixture;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.test.context.support.WithUserDetails;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.ResultActions;
 
 import static java.util.Optional.empty;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.hateoas.MediaTypes.HAL_JSON;
-import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK,
-        classes = {BaseGivenTest.TestConfig.class}, properties = {"spring.session.store-type=NONE"})
-public class NoAccountFoundTest extends BaseGivenTest implements WebApplicationUserFixture {
+public class NoAccountFoundTest extends ExpenseReportControllerTest {
     @Test
     @WithUserDetails(value = "jdoe")
     public void handleViewExpensesRequest_getRequest_shouldReturnExpenseReportSummary() throws Exception {

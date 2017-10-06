@@ -4,7 +4,7 @@ import com.tpg.brks.ms.expenses.domain.Account;
 import com.tpg.brks.ms.expenses.domain.Assignment;
 import com.tpg.brks.ms.expenses.domain.Expense;
 import com.tpg.brks.ms.expenses.domain.ExpenseReport;
-import com.tpg.brks.ms.expenses.web.BaseGivenTest;
+import com.tpg.brks.ms.expenses.integration.web.IntegrationGivenTest;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,7 +13,6 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Date;
-import java.util.List;
 
 import static java.util.Collections.singletonList;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -24,7 +23,7 @@ import static org.hamcrest.Matchers.is;
 @RunWith(SpringRunner.class)
 @ActiveProfiles({"dev"})
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK, properties = {"spring.session.store-type=NONE"})
-public class ExpenseResourceAssemblerTest extends BaseGivenTest {
+public class ExpenseResourceAssemblerTest extends IntegrationGivenTest {
 
     private ExpenseResourceAssembler assembler;
 

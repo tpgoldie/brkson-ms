@@ -1,12 +1,10 @@
-package com.tpg.brks.ms.expenses.web.controllers;
+package com.tpg.brks.ms.expenses.integration.web.controllers.expenseReport;
 
 import com.tpg.brks.ms.expenses.domain.*;
-import com.tpg.brks.ms.expenses.web.BaseGivenTest;
+import com.tpg.brks.ms.expenses.integration.web.IntegrationGivenTest;
 import com.tpg.brks.ms.expenses.web.model.WebApplicationUser;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.security.test.context.support.WithUserDetails;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.Date;
@@ -14,7 +12,6 @@ import java.util.Date;
 import static java.util.Optional.of;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
-import static org.mockito.Matchers.isA;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.hateoas.MediaTypes.HAL_JSON;
@@ -25,8 +22,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@RunWith(SpringRunner.class)
-public class ViewExpenseReportTest extends BaseGivenTest {
+public class GetExpenseReportTest extends IntegrationGivenTest {
 
     @Test
     @WithUserDetails(value = "jdoe")

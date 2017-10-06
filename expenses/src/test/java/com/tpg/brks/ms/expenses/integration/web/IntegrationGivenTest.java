@@ -1,6 +1,8 @@
-package com.tpg.brks.ms.expenses.web;
+package com.tpg.brks.ms.expenses.integration.web;
 
-import com.tpg.brks.ms.expenses.domain.*;
+import com.tpg.brks.ms.expenses.domain.Account;
+import com.tpg.brks.ms.expenses.domain.Assignment;
+import com.tpg.brks.ms.expenses.domain.Given;
 import com.tpg.brks.ms.expenses.service.AccountQueryService;
 import com.tpg.brks.ms.expenses.service.AssignmentQueryService;
 import com.tpg.brks.ms.expenses.service.ExpenseQueryService;
@@ -8,6 +10,7 @@ import com.tpg.brks.ms.expenses.service.ExpenseReportQueryService;
 import com.tpg.brks.ms.expenses.web.model.WebApplicationUser;
 import com.tpg.brks.ms.expenses.web.model.WebApplicationUserFixture;
 import org.junit.Before;
+import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +22,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Map;
@@ -30,10 +34,11 @@ import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.verify;
 import static org.mockito.MockitoAnnotations.initMocks;
 
+@RunWith(SpringRunner.class)
 @AutoConfigureMockMvc
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK,
-        classes = {BaseGivenTest.TestConfig.class}, properties = {"spring.session.store-type=NONE"})
-public abstract class BaseGivenTest implements Given, WebApplicationUserFixture {
+        classes = {IntegrationGivenTest.TestConfig.class}, properties = {"spring.session.store-type=NONE"})
+public abstract class IntegrationGivenTest implements Given, WebApplicationUserFixture {
 
     @TestConfiguration
     public static class TestConfig implements WebApplicationUserFixture {

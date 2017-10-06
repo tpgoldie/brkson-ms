@@ -1,10 +1,15 @@
-package com.tpg.brks.ms.expenses.web.controllers;
+package com.tpg.brks.ms.expenses.web.controllers.expense;
 
 import com.tpg.brks.ms.expenses.domain.*;
-import com.tpg.brks.ms.expenses.web.BaseGivenTest;
+import com.tpg.brks.ms.expenses.integration.web.IntegrationGivenTest;
+import com.tpg.brks.ms.expenses.web.GivenTest;
+import com.tpg.brks.ms.expenses.web.controllers.ExpenseQueryController;
 import com.tpg.brks.ms.expenses.web.model.WebApplicationUser;
+import com.tpg.brks.ms.expenses.web.resources.ExpenseResourceAssembler;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.ResultActions;
@@ -23,8 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@RunWith(SpringRunner.class)
-public class ViewExpenseTest extends BaseGivenTest {
+public class GetExpenseTest extends ExpenseControllerTest {
 
     @Test
     @WithUserDetails(value = "jdoe")

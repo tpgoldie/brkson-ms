@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Optional;
+
 import static org.springframework.hateoas.MediaTypes.HAL_JSON_VALUE;
 import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
 
@@ -46,10 +48,12 @@ public class ExpenseQueryController {
 
         LOGGER.debug("User {} authenticated ...", webApplicationUser.getUsername());
 
-        Expense expense = expenseQueryService.getExpense(expenseId).get();
+        Optional<Expense> expense = expenseQueryService.getExpense(expenseId);
 
-        ExpenseResource resource = expenseResourceAssembly.toResource(expense);
+        return expense.map(this::toResource).orElse(ResponseEntity.notFound().build());
+    }
 
-        return ResponseEntity.ok(resource);
+    private ResponseEntity<ExpenseResource> toResource(Expense expense) {
+        return ResponseEntity.ok(expenseResourceAssembly.toResource(expense));
     }
 }
