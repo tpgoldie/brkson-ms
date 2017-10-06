@@ -7,6 +7,7 @@ import static org.hamcrest.Matchers.is;
 import static org.mockito.Matchers.isA;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.springframework.hateoas.MediaTypes.HAL_JSON;
 import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
@@ -57,8 +58,7 @@ public class NoAssignmentFoundTest extends BaseGivenTest {
 
         return mockMvc.perform(get("/expenseReports")
                 .with(user(webApplicationUser))
-                .accept(APPLICATION_JSON_UTF8)
-                .contentType(APPLICATION_JSON_UTF8))
+                .contentType(HAL_JSON))
                 .andDo(print());
     }
 

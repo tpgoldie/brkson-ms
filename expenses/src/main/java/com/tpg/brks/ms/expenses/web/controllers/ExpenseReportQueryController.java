@@ -80,17 +80,13 @@ public class ExpenseReportQueryController {
         return ResponseEntity.ok(resources);
     }
 
-    @GetMapping(value = "/{reportId}", consumes = APPLICATION_JSON_UTF8_VALUE, produces = {HAL_JSON_VALUE})
+    @GetMapping(value = "/{reportId}", produces = {HAL_JSON_VALUE})
     @Secured("ROLE_EXPENSE_USER")
     @PreAuthorize("authenticated")
     public ResponseEntity<ExpenseReportResource> getExpenseReport(@AuthenticationPrincipal  WebApplicationUser webApplicationUser,
                                                                   @PathVariable Long reportId) {
 
         LOGGER.debug("user {} authenticated ...", webApplicationUser.getUsername());
-
-        Optional<Account> account = accountQueryService.findAccountByUsername(webApplicationUser.getUsername());
-
-        Optional<Assignment> assignment = assignmentQueryService.findCurrentAssignmentForAccount(account.get());
 
         Optional<ExpenseReport> expenseReport = expenseReportQueryService.getExpenseReport(reportId);
 

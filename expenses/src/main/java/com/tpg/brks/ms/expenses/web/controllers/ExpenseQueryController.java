@@ -22,7 +22,7 @@ import static org.springframework.hateoas.MediaTypes.HAL_JSON_VALUE;
 import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
 
 @RestController
-@RequestMapping("expenses")
+@RequestMapping("/expenses")
 @ExposesResourceFor(Expense.class)
 public class ExpenseQueryController {
 
@@ -38,7 +38,7 @@ public class ExpenseQueryController {
         this.expenseResourceAssembly = expenseResourceAssembly;
     }
 
-    @GetMapping(value = "/{expenseId}", consumes = APPLICATION_JSON_UTF8_VALUE, produces = {HAL_JSON_VALUE})
+    @GetMapping(value = "/{expenseId}", produces = {HAL_JSON_VALUE})
     @Secured("ROLE_EXPENSE_USER")
     @PreAuthorize("authenticated")
     public ResponseEntity<ExpenseResource> getExpense(@AuthenticationPrincipal WebApplicationUser webApplicationUser,

@@ -1,12 +1,10 @@
 package com.tpg.brks.ms.expenses.web.controllers;
 
 import com.tpg.brks.ms.expenses.domain.*;
-import com.tpg.brks.ms.expenses.service.ExpenseQueryService;
 import com.tpg.brks.ms.expenses.web.BaseGivenTest;
 import com.tpg.brks.ms.expenses.web.model.WebApplicationUser;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.ResultActions;
@@ -27,12 +25,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @RunWith(SpringRunner.class)
 public class ViewExpenseTest extends BaseGivenTest {
-    @MockBean
-    private ExpenseQueryService expenseQueryService;
 
     @Test
     @WithUserDetails(value = "jdoe")
-    public void handleViewExpensesRequest_getRequest_shouldReturnExpenseReportSummary() throws Exception {
+    public void getExpense_getRequest_shouldReturnExpense() throws Exception {
         WebApplicationUser webApplicationUser = givenAWebApplicationUser();
 
         Account account = givenAnAccount();
@@ -41,19 +37,18 @@ public class ViewExpenseTest extends BaseGivenTest {
 
         Date periodStart = generateDate(13, 5, 2016);
         Date periodEnd = generateDate(15, 8, 2016);
-        Period period = new Period("13/05/2016", "15/08/2016");
 
         ExpenseReport expenseReport = givenAPendingExpenseReport(assignment, periodStart, periodEnd);
 
         Expense expense = givenAnExpense(expenseReport);
 
-        ResultActions resultActions = whenSendRequestForViewingExpense(webApplicationUser, expense);
+        ResultActions resultActions = whenGettingExpense(webApplicationUser, expense);
 
         thenExpectExpense(resultActions, webApplicationUser, expense);
     }
 
-    private ResultActions whenSendRequestForViewingExpense(WebApplicationUser webApplicationUser,
-                                                         Expense expense) throws Exception {
+    private ResultActions whenGettingExpense(WebApplicationUser webApplicationUser,
+                                             Expense expense) throws Exception {
 
         when(expenseQueryService.getExpense(expense.getId())).thenReturn(of(expense));
 
@@ -69,13 +64,13 @@ public class ViewExpenseTest extends BaseGivenTest {
                 .andExpect(authenticated()
                         .withUsername(webApplicationUser.getUsername())
                         .withRoles("EXPENSE_USER"))
-                .andExpect(jsonPath("$.expenseId", is(expense.getId().intValue())))
+                .andExpect(jsonPath("$.id", is(expense.getId().intValue())))
                 .andExpect(jsonPath("$.description", is(expense.getDescription())))
                 .andExpect(jsonPath("$.dateEntered", is(expense.getDateEntered())))
                 .andExpect(jsonPath("$.expenseDate", is(expense.getExpenseDate())))
                 .andExpect(jsonPath("$.status", is(expense.getStatus().name())))
                 .andExpect(jsonPath("$.expenseType", is(expense.getExpenseType().name())))
-                .andExpect(jsonPath("$.amount", is(expense.getAmount())));
+                .andExpect(jsonPath("$.amount", is(expense.getAmount().doubleValue())));
 
         verify(expenseQueryService).getExpense(expense.getId());
     }

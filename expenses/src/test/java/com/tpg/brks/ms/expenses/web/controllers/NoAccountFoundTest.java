@@ -13,6 +13,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import static java.util.Optional.empty;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.springframework.hateoas.MediaTypes.HAL_JSON;
 import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
@@ -39,8 +40,7 @@ public class NoAccountFoundTest extends BaseGivenTest implements WebApplicationU
 
         return mockMvc.perform(get("/expenseReports")
                 .with(user(webApplicationUser))
-                .accept(APPLICATION_JSON_UTF8)
-                .contentType(APPLICATION_JSON_UTF8))
+                .contentType(HAL_JSON))
                 .andDo(print());
     }
 

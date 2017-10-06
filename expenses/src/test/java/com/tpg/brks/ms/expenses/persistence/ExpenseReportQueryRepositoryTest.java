@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -77,7 +78,7 @@ public class ExpenseReportQueryRepositoryTest extends RepositoryTest implements 
     private ExpenseEntity givenAnExpense() {
         Date expenseDate = generateDate(10, 3, 2017);
 
-        ExpenseEntity expense = anExpense("lunch", expenseDate, PENDING, SUBSISTENCE);
+        ExpenseEntity expense = aPendingExpense("lunch", expenseDate, SUBSISTENCE, new BigDecimal("23.75"));
 
         return expenseLifecycleRepository.save(expense);
     }

@@ -1,9 +1,6 @@
 package com.tpg.brks.ms.expenses.web.controllers;
 
-import com.tpg.brks.ms.expenses.domain.Account;
-import com.tpg.brks.ms.expenses.domain.Assignment;
-import com.tpg.brks.ms.expenses.domain.ExpenseReport;
-import com.tpg.brks.ms.expenses.domain.Period;
+import com.tpg.brks.ms.expenses.domain.*;
 import com.tpg.brks.ms.expenses.web.BaseGivenTest;
 import com.tpg.brks.ms.expenses.web.model.WebApplicationUser;
 import org.junit.Test;
@@ -21,7 +18,6 @@ import static org.mockito.Matchers.isA;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.hateoas.MediaTypes.HAL_JSON;
-import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -34,7 +30,7 @@ public class ViewExpenseReportTest extends BaseGivenTest {
 
     @Test
     @WithUserDetails(value = "jdoe")
-    public void handleViewExpensesRequest_getRequest_shouldReturnExpenseReportSummary() throws Exception {
+    public void getExpenseReport_getRequest_shouldReturnExpenseReport() throws Exception {
         WebApplicationUser webApplicationUser = givenAWebApplicationUser();
 
         Account account = givenAnAccount();
@@ -47,20 +43,13 @@ public class ViewExpenseReportTest extends BaseGivenTest {
 
         ExpenseReport expenseReport = givenAPendingExpenseReport(assignment, periodStart, periodEnd);
 
-        ResultActions resultActions = whenSendRequestForViewingExpenseReport(webApplicationUser, account, assignment,
-                expenseReport);
+        ResultActions resultActions = whenGettingExpenseReport(webApplicationUser, expenseReport);
 
-        thenExpectExpenseReport(resultActions, webApplicationUser, account, assignment, period, expenseReport);
+        thenExpectExpenseReport(resultActions, webApplicationUser, period, expenseReport);
     }
 
-    private ResultActions whenSendRequestForViewingExpenseReport(WebApplicationUser webApplicationUser,
-                                                                  Account account,
-                                                                  Assignment assignment,
-                                                                  ExpenseReport expenseReport) throws Exception {
-
-        when(accountQueryService.findAccountByUsername(account.getUsername())).thenReturn(of(account));
-
-        when(assignmentQueryService.findCurrentAssignmentForAccount(isA(Account.class))).thenReturn(of(assignment));
+    private ResultActions whenGettingExpenseReport(WebApplicationUser webApplicationUser,
+                                                   ExpenseReport expenseReport) throws Exception {
 
         when(expenseReportQueryService.getExpenseReport(expenseReport.getId())).thenReturn(of(expenseReport));
 
@@ -71,29 +60,26 @@ public class ViewExpenseReportTest extends BaseGivenTest {
     }
 
     private void thenExpectExpenseReport(ResultActions resultActions, WebApplicationUser webApplicationUser,
-                                                Account expectedAccount,
-                                                Assignment expectedAssignment,
                                                 Period period,
                                                 ExpenseReport expenseReport) throws Exception {
+
+        Expense actualExpense = expenseReport.getExpenses().get(0);
 
         resultActions
             .andExpect(status().isOk())
             .andExpect(authenticated()
                 .withUsername(webApplicationUser.getUsername())
                 .withRoles("EXPENSE_USER"))
-            .andExpect(jsonPath("$.expenseReportId", is(expenseReport.getId().intValue())))
+            .andExpect(jsonPath("$.id", is(expenseReport.getId().intValue())))
             .andExpect(jsonPath("$.description", is(expenseReport.getDescription())))
             .andExpect(jsonPath("$.periodStart", is(period.getPeriodStart())))
             .andExpect(jsonPath("$.periodEnd", is(period.getPeriodEnd())))
             .andExpect(jsonPath("$.status", is(expenseReport.getStatus().name())))
-            .andExpect(jsonPath("$.expenses[0].id", is(expenseReport.getExpenses().get(0).getId())))
-            .andExpect(jsonPath("$.expenses[0].description", is(expenseReport.getExpenses().get(0).getDescription())))
-            .andExpect(jsonPath("$.expenses[0].amount", is(expenseReport.getExpenses().get(0).getAmount())));
+            .andExpect(jsonPath("$.expenses", hasSize(1)))
+            .andExpect(jsonPath("$.expenses[0].id", is(actualExpense.getId().intValue())))
+            .andExpect(jsonPath("$.expenses[0].description", is(actualExpense.getDescription())))
+            .andExpect(jsonPath("$.expenses[0].amount", is(actualExpense.getAmount().doubleValue())));
 
-        verifyAccountQuery(expectedAccount);
-
-        verify(accountQueryService).findAccountByUsername(webApplicationUser.getUsername());
-
-        verifyAssignmentQuery(expectedAssignment);
+        verify(expenseReportQueryService).getExpenseReport(expenseReport.getId());
     }
 }

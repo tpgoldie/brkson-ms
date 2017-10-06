@@ -1,15 +1,13 @@
 package com.tpg.brks.ms.expenses.domain;
 
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.NonNull;
-import lombok.Value;
+import lombok.*;
 
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 
-@Value
+@Data
 @Builder
+@AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class Assignment extends Identifier {
     @NonNull
@@ -23,4 +21,6 @@ public class Assignment extends Identifier {
     private Date endDate;
 
     private AssignmentStatus status;
+
+    public Assignment() {}
 }
