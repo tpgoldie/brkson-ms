@@ -1,6 +1,7 @@
 package com.tpg.brks.ms.expenses.domain;
 
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.NonNull;
 import lombok.Value;
 
@@ -9,9 +10,8 @@ import java.util.Date;
 
 @Value
 @Builder
-public class Assignment {
-    private Long id;
-
+@EqualsAndHashCode(callSuper = true)
+public class Assignment extends Identifier {
     @NonNull
     @NotNull
     private Account account;

@@ -3,10 +3,13 @@ package com.tpg.brks.ms.expenses.web;
 import com.tpg.brks.ms.expenses.domain.*;
 import com.tpg.brks.ms.expenses.service.AccountQueryService;
 import com.tpg.brks.ms.expenses.service.AssignmentQueryService;
+import com.tpg.brks.ms.expenses.service.ExpenseQueryService;
 import com.tpg.brks.ms.expenses.service.ExpenseReportQueryService;
 import com.tpg.brks.ms.expenses.web.model.WebApplicationUser;
 import com.tpg.brks.ms.expenses.web.model.WebApplicationUserFixture;
 import org.junit.Before;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -22,6 +25,9 @@ import java.util.Map;
 
 import static java.util.Collections.singletonList;
 import static java.util.stream.Collectors.toMap;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.mockito.Mockito.verify;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 @AutoConfigureMockMvc
@@ -57,6 +63,12 @@ public abstract class BaseGivenTest implements Given, WebApplicationUserFixture 
     @MockBean
     protected ExpenseReportQueryService expenseReportQueryService;
 
+    @MockBean
+    protected ExpenseQueryService expenseQueryService;
+
+    @Captor
+    private ArgumentCaptor<Account> accountArgumentCaptor;
+
     @Before
     public void setUp() {
         initMocks(this);
@@ -64,5 +76,17 @@ public abstract class BaseGivenTest implements Given, WebApplicationUserFixture 
 
     protected WebApplicationUser givenAWebApplicationUser() {
         return johnDoeWebAppUser();
+    }
+
+    protected void verifyAccountQuery(Account expectedAccount) {
+        verify(assignmentQueryService).findCurrentAssignmentForAccount(accountArgumentCaptor.capture());
+
+        Account actualAccount = accountArgumentCaptor.getValue();
+
+        assertThat(actualAccount, is(expectedAccount));
+    }
+
+    protected void verifyAssignmentQuery(Assignment expectedAssignment) {
+        verify(expenseReportQueryService).getExpenseReportsForAssignment(expectedAssignment.getId());
     }
 }

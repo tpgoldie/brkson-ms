@@ -21,6 +21,9 @@
             <column name="date_entered" type="date">
                 <constraints nullable="false" />
             </column>
+            <column name="expense_amount" type="currency">
+                <constraints nullable="false" />
+            </column>
             <column name="expense_type" type="varchar(20)">
                 <constraints nullable="false" />
             </column>

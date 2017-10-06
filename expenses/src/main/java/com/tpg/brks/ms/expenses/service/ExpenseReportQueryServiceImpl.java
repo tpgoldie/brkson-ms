@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import static java.util.stream.Collectors.toList;
 
@@ -44,5 +45,10 @@ public class ExpenseReportQueryServiceImpl implements ExpenseReportQueryService,
         List<ExpenseReportEntity> found = expenseReportQueryRepository.findByAssignmentId(assignmentId);
 
         return found.stream().map(entity -> modelMapper.map(entity, ExpenseReport.class)).collect(toList());
+    }
+
+    @Override
+    public Optional<ExpenseReport> getExpenseReport(Long reportId) {
+        return null;
     }
 }

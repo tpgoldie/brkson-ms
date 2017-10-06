@@ -10,13 +10,15 @@ public interface AssignmentFixture {
     }
 
     default Assignment anAssignment(Account account, Long id, String description, Date startDate, Date endDate, AssignmentStatus status) {
-        return Assignment.builder()
-                .id(id)
+        Assignment assignment = Assignment.builder()
                 .account(account)
                 .description(description)
                 .startDate(startDate)
                 .endDate(endDate)
                 .status(status)
                 .build();
+
+        assignment.setId(id);
+        return assignment;
     }
 }

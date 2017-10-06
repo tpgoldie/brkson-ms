@@ -1,44 +1,53 @@
 package com.tpg.brks.ms.expenses.web.resources;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonUnwrapped;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import com.tpg.brks.ms.expenses.domain.Expense;
+import com.tpg.brks.ms.expenses.domain.ExpenseReport;
 import com.tpg.brks.ms.expenses.utils.DateGeneration;
+import com.tpg.brks.ms.expenses.web.controllers.ExpenseQueryController;
 import com.tpg.brks.ms.expenses.web.controllers.ExpenseReportQueryController;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.hateoas.ResourceSupport;
+import org.springframework.hateoas.Resources;
+import org.springframework.hateoas.core.EmbeddedWrapper;
+import org.springframework.hateoas.core.EmbeddedWrappers;
 import org.springframework.hateoas.core.Relation;
 
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.List;
 
+import static java.util.stream.Collectors.toList;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
-@NoArgsConstructor
 @Getter
 @Setter
 @Relation(value = "expenseReport", collectionRelation = "expenseReports")
-public class ExpenseReportResource extends ResourceSupport implements DateGeneration {
-    private Long expenseReportId;
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class ExpenseReportResource extends IdentifiedResource<ExpenseReport> implements DateGeneration {
 
-    private String description;
+    @JsonUnwrapped()
+    private List<ExpenseResource> expenses;
 
-    private String periodStart;
+    public ExpenseReportResource(ExpenseReport expenseReport) {
 
-    private String periodEnd;
+        super(expenseReport);
 
-    private String status;
-
-    @JsonCreator
-    public ExpenseReportResource(String description, Date periodStart, Date periodEnd, String status) {
-        this.description = description;
-        this.periodStart = toDdMmYyyyFormat(periodStart);
-        this.periodEnd = toDdMmYyyyFormat(periodEnd);
-        this.status = status;
-
-        link();
+        setResourceId(expenseReport.getId());
     }
 
-    private void link() {
-        add(linkTo(ExpenseReportQueryController.class).slash("expenseReport").slash(getExpenseReportId()).withSelfRel());
+    void addExpenseResources(List<Expense> expenses) {
+
+        ExpenseResourceAssembly expenseResourceAssembly = new ExpenseResourceAssembler();
+
+        this.expenses = expenseResourceAssembly.toResources(expenses);
+    }
+
+    public void link() {
+        add(linkTo(methodOn(ExpenseReportQueryController.class).getExpenseReport(null, getContent().getId()))
+                .withSelfRel());
     }
 }
