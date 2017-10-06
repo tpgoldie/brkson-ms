@@ -1,4 +1,4 @@
-package com.tpg.brks.ms.expenses.service;
+package com.tpg.brks.ms.expenses.persistence;
 
 import com.tpg.brks.ms.expenses.persistence.entities.*;
 import com.tpg.brks.ms.expenses.utils.DateGeneration;
@@ -9,16 +9,16 @@ import java.util.List;
 
 import static com.tpg.brks.ms.expenses.domain.ExpenseType.SUBSISTENCE;
 
-public interface Given extends DateGeneration, AccountFixture, AssignmentFixture, ExpenseReportFixture, ExpenseFixture {
+public interface PeristenceGiven extends DateGeneration, AccountFixture, AssignmentFixture, ExpenseReportFixture, ExpenseFixture {
     Long ID = 101L;
 
-    default AccountEntity givenAnAccount() {
+    default AccountEntity givenAnAccountEntity() {
         AccountEntity accountEntity = anOpenAccount("John", "Doe", "jdoe");
         accountEntity.setId(ID);
         return accountEntity;
     }
 
-    default AssignmentEntity givenAnAssignment(AccountEntity accountEntity) {
+    default AssignmentEntity givenAnAssignmentEntity(AccountEntity accountEntity) {
         Date startDate = generateDate(1, 1, 2016);
 
         AssignmentEntity assignment = anOpenAssignment(accountEntity, "Assignment 1", startDate);
@@ -27,14 +27,14 @@ public interface Given extends DateGeneration, AccountFixture, AssignmentFixture
         return assignment;
     }
 
-    default ExpenseReportEntity givenAnExpenseReport(AssignmentEntity assignmentEntity, List<ExpenseEntity> expenses) {
+    default ExpenseReportEntity givenAnExpenseReportEntity(AssignmentEntity assignmentEntity, List<ExpenseEntity> expenses) {
         ExpenseReportEntity expenseReportEntity = anExpenseReport(assignmentEntity, "Report 1", expenses);
         expenseReportEntity.setId(ID);
 
         return expenseReportEntity;
     }
 
-    default ExpenseEntity givenAnExpense() {
+    default ExpenseEntity givenAnExpenseEntity() {
         Date expenseDate = generateDate(23, 6, 2016);
 
         ExpenseEntity expenseEntity = aPendingExpense("Expense 1", expenseDate, SUBSISTENCE, new BigDecimal(125.45));

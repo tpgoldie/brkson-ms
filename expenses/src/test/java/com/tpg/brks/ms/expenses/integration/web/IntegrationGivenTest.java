@@ -7,6 +7,8 @@ import com.tpg.brks.ms.expenses.service.AccountQueryService;
 import com.tpg.brks.ms.expenses.service.AssignmentQueryService;
 import com.tpg.brks.ms.expenses.service.ExpenseQueryService;
 import com.tpg.brks.ms.expenses.service.ExpenseReportQueryService;
+import com.tpg.brks.ms.expenses.service.converters.AccountConverter;
+import com.tpg.brks.ms.expenses.service.converters.AssignmentConverter;
 import com.tpg.brks.ms.expenses.web.model.WebApplicationUser;
 import com.tpg.brks.ms.expenses.web.model.WebApplicationUserFixture;
 import org.junit.Before;
@@ -19,9 +21,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Import;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -36,8 +40,10 @@ import static org.mockito.MockitoAnnotations.initMocks;
 
 @RunWith(SpringRunner.class)
 @AutoConfigureMockMvc
+@ActiveProfiles(profiles = {"int"})
+@Import(value = {AccountConverter.class})
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK,
-        classes = {IntegrationGivenTest.TestConfig.class}, properties = {"spring.session.store-type=NONE"})
+    classes = {IntegrationGivenTest.TestConfig.class}, properties = {"spring.session.store-type=NONE"})
 public abstract class IntegrationGivenTest implements Given, WebApplicationUserFixture {
 
     @TestConfiguration
@@ -59,7 +65,7 @@ public abstract class IntegrationGivenTest implements Given, WebApplicationUserF
     @Autowired
     protected MockMvc mockMvc;
 
-    @MockBean
+    @Autowired
     protected AssignmentQueryService assignmentQueryService;
 
     @MockBean
@@ -89,9 +95,5 @@ public abstract class IntegrationGivenTest implements Given, WebApplicationUserF
         Account actualAccount = accountArgumentCaptor.getValue();
 
         assertThat(actualAccount, is(expectedAccount));
-    }
-
-    protected void verifyAssignmentQuery(Assignment expectedAssignment) {
-        verify(expenseReportQueryService).getExpenseReportsForAssignment(expectedAssignment.getId());
     }
 }

@@ -1,12 +1,15 @@
 package com.tpg.brks.ms.expenses.domain;
 
 
-import lombok.Builder;
-import lombok.Value;
+import lombok.*;
 
-@Value
+@Data
 @Builder
-public class Account {
+@Getter
+@Setter
+@AllArgsConstructor
+@EqualsAndHashCode(callSuper = true)
+public class Account extends Identifier {
     private String firstName;
 
     private String lastName;
@@ -14,4 +17,6 @@ public class Account {
     private String username;
 
     private AccountStatus status;
+
+    public Account() {}
 }

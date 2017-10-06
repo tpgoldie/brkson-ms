@@ -21,9 +21,6 @@ import static java.util.stream.Collectors.toList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
-@RunWith(SpringRunner.class)
-@ActiveProfiles({"dev"})
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK, properties = {"spring.session.store-type=NONE"})
 public class ExpenseReportResourceAssemblerTest extends IntegrationGivenTest {
 
     private ExpenseReportResourceAssembler assembler;

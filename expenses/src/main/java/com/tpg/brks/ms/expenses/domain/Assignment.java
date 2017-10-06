@@ -7,6 +7,8 @@ import java.util.Date;
 
 @Data
 @Builder
+@Setter
+@Getter
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class Assignment extends Identifier {

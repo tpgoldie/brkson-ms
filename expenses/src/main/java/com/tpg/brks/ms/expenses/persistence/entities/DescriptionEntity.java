@@ -9,9 +9,9 @@ import javax.validation.constraints.NotNull;
 
 @MappedSuperclass
 @RequiredArgsConstructor
+@Getter
+@Setter
 public abstract class DescriptionEntity extends BaseEntity {
-    @Getter
-    @Setter
     @NotNull
     private String description;
 }

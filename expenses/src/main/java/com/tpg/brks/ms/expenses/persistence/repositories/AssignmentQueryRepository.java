@@ -9,4 +9,6 @@ import java.util.Optional;
 @Repository
 public interface AssignmentQueryRepository extends AssignmentRepository {
     Optional<AssignmentEntity> findById(@Param("id") Long id);
+
+    Optional<AssignmentEntity> findCurrentAssignmentByAccount(@Param("accountId") Long accountId);
 }

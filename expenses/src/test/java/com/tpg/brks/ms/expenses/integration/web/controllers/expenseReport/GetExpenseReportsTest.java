@@ -57,8 +57,6 @@ public class GetExpenseReportsTest extends IntegrationGivenTest {
 
         when(accountQueryService.findAccountByUsername(account.getUsername())).thenReturn(Optional.of(account));
 
-        when(assignmentQueryService.findCurrentAssignmentForAccount(isA(Account.class))).thenReturn(Optional.of(assignment));
-
         when(expenseReportQueryService.getExpenseReportsForAssignment(assignment.getId())).thenReturn(expenseReports);
 
         return mockMvc.perform(get("/expenseReports")
@@ -88,12 +86,11 @@ public class GetExpenseReportsTest extends IntegrationGivenTest {
                 .andExpect(jsonPath("$[0].periodEnd", is(period.getPeriodEnd())))
                 .andExpect(jsonPath("$[0].status", is(expenseReports.get(0).getStatus().name())))
                 .andExpect(jsonPath("$[0].links[0].href", containsString(String.format("expenseReports/%s", expenseReportId))))
-                .andExpect(jsonPath("$[0].expenses", hasSize(1)));
+                .andExpect(jsonPath("$[0].expenses", hasSize(1)))
+                .andExpect(jsonPath("$[0].expenses[0].id", is(expenseId.intValue())));
 
         verifyAccountQuery(expectedAccount);
 
         verify(accountQueryService).findAccountByUsername(webApplicationUser.getUsername());
-
-        verifyAssignmentQuery(expectedAssignment);
     }
 }

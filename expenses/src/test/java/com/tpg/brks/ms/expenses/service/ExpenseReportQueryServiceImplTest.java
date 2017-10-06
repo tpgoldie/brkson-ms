@@ -1,6 +1,7 @@
 package com.tpg.brks.ms.expenses.service;
 
 import com.tpg.brks.ms.expenses.domain.ExpenseReport;
+import com.tpg.brks.ms.expenses.persistence.PeristenceGiven;
 import com.tpg.brks.ms.expenses.persistence.entities.AccountEntity;
 import com.tpg.brks.ms.expenses.persistence.entities.AssignmentEntity;
 import com.tpg.brks.ms.expenses.persistence.entities.ExpenseEntity;
@@ -13,7 +14,6 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.List;
-import java.util.Optional;
 
 import static java.util.Collections.singletonList;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -23,7 +23,7 @@ import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
-public class ExpenseReportQueryServiceImplTest implements Given {
+public class ExpenseReportQueryServiceImplTest implements PeristenceGiven {
 
     @Mock
     private ExpenseReportQueryRepository expenseReportQueryRepository;
@@ -33,13 +33,13 @@ public class ExpenseReportQueryServiceImplTest implements Given {
 
     @Test
     public void findingExpenseReportsByAssignment() {
-        AccountEntity accountEntity = givenAnAccount();
+        AccountEntity accountEntity = givenAnAccountEntity();
 
-        AssignmentEntity assignmentEntity = givenAnAssignment(accountEntity);
+        AssignmentEntity assignmentEntity = givenAnAssignmentEntity(accountEntity);
 
-        ExpenseEntity expenseEntity = givenAnExpense();
+        ExpenseEntity expenseEntity = givenAnExpenseEntity();
 
-        ExpenseReportEntity expenseReportEntity = givenAnExpenseReport(assignmentEntity, singletonList(expenseEntity));
+        ExpenseReportEntity expenseReportEntity = givenAnExpenseReportEntity(assignmentEntity, singletonList(expenseEntity));
 
         List<ExpenseReport> actual = whenRequestingAnExpenseReportByAssignment(assignmentEntity, expenseReportEntity);
 
