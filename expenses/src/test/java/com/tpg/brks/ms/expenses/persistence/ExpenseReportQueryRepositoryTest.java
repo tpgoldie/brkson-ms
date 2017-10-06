@@ -6,16 +6,12 @@ import com.tpg.brks.ms.expenses.persistence.repositories.ExpenseReportLifecycleR
 import com.tpg.brks.ms.expenses.persistence.repositories.ExpenseReportQueryRepository;
 import com.tpg.brks.ms.utils.UniqueIdGeneration;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
-import static com.tpg.brks.ms.expenses.domain.ExpenseStatus.PENDING;
 import static com.tpg.brks.ms.expenses.domain.ExpenseType.SUBSISTENCE;
 import static java.util.Collections.singletonList;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -23,19 +19,7 @@ import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.core.Is.is;
 
-@RunWith(SpringRunner.class)
-@DataJpaTest
-public class ExpenseReportQueryRepositoryTest extends RepositoryTest implements UniqueIdGeneration, ExpenseReportFixture,
-        ExpenseFixture {
-
-    @Autowired
-    private ExpenseReportLifecycleRepository expenseReportLifecycleRepository;
-
-    @Autowired
-    private ExpenseLifecycleRepository expenseLifecycleRepository;
-
-    @Autowired
-    private ExpenseReportQueryRepository expenseReportRepository;
+public class ExpenseReportQueryRepositoryTest extends RepositoryTest implements UniqueIdGeneration {
 
     @Test
     public void whenRequestingExpenseReportsByAssignment_anAssignment_thenAllExpenseReportsAreReturned() {
@@ -68,22 +52,7 @@ public class ExpenseReportQueryRepositoryTest extends RepositoryTest implements 
                 hasProperty("id", is(expectedReport.getExpenses().get(0).getId())));
     }
 
-    private ExpenseReportEntity givenAnExpenseReport(AssignmentEntity assignment, List<ExpenseEntity> expenses) {
-
-        ExpenseReportEntity report = anExpenseReport(assignment, "report 1", expenses);
-
-        return expenseReportLifecycleRepository.save(report);
-    }
-
-    private ExpenseEntity givenAnExpense() {
-        Date expenseDate = generateDate(10, 3, 2017);
-
-        ExpenseEntity expense = aPendingExpense("lunch", expenseDate, SUBSISTENCE, new BigDecimal("23.75"));
-
-        return expenseLifecycleRepository.save(expense);
-    }
-
     private List<ExpenseReportEntity> whenRequestingExpenseReportsByAssignment(AssignmentEntity assignment) {
-        return expenseReportRepository.findByAssignmentId(assignment.getId());
+        return expenseReportQueryRepository.findByAssignmentId(assignment.getId());
     }
 }
