@@ -8,10 +8,11 @@ public interface AccountFixture {
         name.setFirstName(firstName);
         name.setLastName(lastName);
 
-        return AccountEntity.builder()
-            .name(name)
-            .username(username)
-            .status(OPEN)
-            .build();
+        AccountEntity entity = new AccountEntity();
+        entity.setName(name);
+        entity.setUsername(username);
+        entity.setStatus(OPEN);
+
+        return entity;
     }
 }

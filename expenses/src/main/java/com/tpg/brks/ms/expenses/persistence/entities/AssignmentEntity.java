@@ -11,11 +11,10 @@ import java.util.Date;
 import java.util.List;
 
 @Table(name = "assignments_tbl", schema = "brks_expenses")
-@Entity(name = "assignment")
+@Entity(name = "Assignment")
 @SequenceGenerator( name = "seq_generator", sequenceName = "assignments_seq" )
 @Getter
 @Setter
-@Builder
 public class AssignmentEntity extends DescriptionEntity {
 
     @NotNull
@@ -40,4 +39,6 @@ public class AssignmentEntity extends DescriptionEntity {
 
     @OneToMany(mappedBy = "assignment")
     private List<ExpenseReportEntity> expenseReports;
+
+    public AssignmentEntity() {}
 }

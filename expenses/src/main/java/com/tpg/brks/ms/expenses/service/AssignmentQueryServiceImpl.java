@@ -2,13 +2,9 @@ package com.tpg.brks.ms.expenses.service;
 
 import com.tpg.brks.ms.expenses.domain.Account;
 import com.tpg.brks.ms.expenses.domain.Assignment;
-import com.tpg.brks.ms.expenses.persistence.entities.AccountEntity;
 import com.tpg.brks.ms.expenses.persistence.entities.AssignmentEntity;
 import com.tpg.brks.ms.expenses.persistence.repositories.AssignmentQueryRepository;
 import com.tpg.brks.ms.expenses.service.converters.AssignmentConverting;
-import org.modelmapper.Converter;
-import org.modelmapper.ModelMapper;
-import org.modelmapper.TypeMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +31,7 @@ public class AssignmentQueryServiceImpl implements AssignmentQueryService {
 
     @Override
     public Optional<Assignment> findCurrentAssignmentForAccount(Account account) {
-        Optional<AssignmentEntity> found = assignmentQueryRepository.findCurrentAssignmentByAccount(account.getId());
+        Optional<AssignmentEntity> found = assignmentQueryRepository.findFirstByAccountIdOrderByStartDateDesc(account.getId());
 
         return found.map(entity -> assignmentConverting.convert(entity));
     }

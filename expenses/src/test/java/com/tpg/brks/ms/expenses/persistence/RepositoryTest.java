@@ -58,6 +58,23 @@ public abstract class RepositoryTest implements DateGeneration, AccountFixture, 
         return assignmentLifecycleRepository.save(assignment);
     }
 
+    protected AssignmentEntity givenCurrentAssignment(AccountEntity account) {
+        Date startDate = generateDate(21,4,2017);
+
+        AssignmentEntity assignment = anOpenAssignment(account, "current assignment", startDate);
+
+        return assignmentLifecycleRepository.save(assignment);
+    }
+
+    protected AssignmentEntity givenPreviousAssignment(AccountEntity account) {
+        Date startDate = generateDate(21,4,2016);
+        Date endDate = generateDate(21,7,2016);
+
+        AssignmentEntity assignment = aClosedAssignment(account, "previous assignment", startDate, endDate);
+
+        return assignmentLifecycleRepository.save(assignment);
+    }
+
     protected ExpenseReportEntity givenAnExpenseReport(AssignmentEntity assignment, List<ExpenseEntity> expenses) {
 
         ExpenseReportEntity report = anExpenseReport(assignment, "report 1", expenses);

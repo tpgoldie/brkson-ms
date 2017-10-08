@@ -17,7 +17,6 @@ import java.util.Optional;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
-import static org.mockito.Matchers.isA;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.hateoas.MediaTypes.HAL_JSON_VALUE;
@@ -35,9 +34,9 @@ public class GetExpenseReportsTest extends IntegrationGivenTest {
     public void getExpenseReports_getRequest_shouldReturnExpenseReports() throws Exception {
         WebApplicationUser webApplicationUser = givenAWebApplicationUser();
 
-        Account account = givenAnAccount();
+        Account account = accountIntegrationGiven.givenAnAccount();
 
-        Assignment assignment = givenAnAssignment(account);
+        Assignment assignment = assignmentIntegrationGiven.givenACurrentAssignment(account);
 
         Date periodStart = generateDate(13, 5, 2016);
         Date periodEnd = generateDate(15, 8, 2016);
@@ -47,7 +46,7 @@ public class GetExpenseReportsTest extends IntegrationGivenTest {
 
         ResultActions resultActions = whenSendRequestForViewingExpenseReports(webApplicationUser, account, assignment, expenseReports);
 
-        thenExpectExpenseReports(resultActions, webApplicationUser, account, assignment, period, expenseReports);
+        thenExpectExpenseReports(resultActions, webApplicationUser, account, period, expenseReports);
     }
 
     private ResultActions whenSendRequestForViewingExpenseReports(WebApplicationUser webApplicationUser,
@@ -65,11 +64,11 @@ public class GetExpenseReportsTest extends IntegrationGivenTest {
                 .andDo(print());
     }
 
-    private void thenExpectExpenseReports(ResultActions resultActions, WebApplicationUser webApplicationUser,
-                                                Account expectedAccount,
-                                                Assignment expectedAssignment,
-                                                Period period,
-                                                List<ExpenseReport> expenseReports) throws Exception {
+    private void thenExpectExpenseReports(ResultActions resultActions,
+                                          WebApplicationUser webApplicationUser,
+                                          Account expectedAccount,
+                                          Period period,
+                                          List<ExpenseReport> expenseReports) throws Exception {
 
         Long expenseReportId = expenseReports.get(0).getId();
         Long expenseId = expenseReports.get(0).getExpenses().get(0).getId();
@@ -88,8 +87,6 @@ public class GetExpenseReportsTest extends IntegrationGivenTest {
                 .andExpect(jsonPath("$[0].links[0].href", containsString(String.format("expenseReports/%s", expenseReportId))))
                 .andExpect(jsonPath("$[0].expenses", hasSize(1)))
                 .andExpect(jsonPath("$[0].expenses[0].id", is(expenseId.intValue())));
-
-        verifyAccountQuery(expectedAccount);
 
         verify(accountQueryService).findAccountByUsername(webApplicationUser.getUsername());
     }

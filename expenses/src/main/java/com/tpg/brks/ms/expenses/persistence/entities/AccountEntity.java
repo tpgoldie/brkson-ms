@@ -15,7 +15,6 @@ import java.util.List;
 @SequenceGenerator( name = "seq_generator", sequenceName = "accounts_seq" )
 @Getter
 @Setter
-@Builder
 public class AccountEntity extends BaseEntity {
     @Embedded
     @AttributeOverrides({
@@ -34,4 +33,6 @@ public class AccountEntity extends BaseEntity {
 
     @OneToMany(mappedBy = "account")
     private List<AssignmentEntity> assignments;
+
+    public AccountEntity() {}
 }

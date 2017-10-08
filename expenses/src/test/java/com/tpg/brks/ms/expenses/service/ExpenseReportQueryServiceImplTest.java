@@ -1,7 +1,7 @@
 package com.tpg.brks.ms.expenses.service;
 
 import com.tpg.brks.ms.expenses.domain.ExpenseReport;
-import com.tpg.brks.ms.expenses.persistence.PeristenceGiven;
+import com.tpg.brks.ms.expenses.persistence.PersistenceGiven;
 import com.tpg.brks.ms.expenses.persistence.entities.AccountEntity;
 import com.tpg.brks.ms.expenses.persistence.entities.AssignmentEntity;
 import com.tpg.brks.ms.expenses.persistence.entities.ExpenseEntity;
@@ -23,7 +23,7 @@ import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
-public class ExpenseReportQueryServiceImplTest implements PeristenceGiven {
+public class ExpenseReportQueryServiceImplTest implements PersistenceGiven {
 
     @Mock
     private ExpenseReportQueryRepository expenseReportQueryRepository;

@@ -47,7 +47,7 @@ public class AssignmentQueryServiceImplTest extends ServiceImplTest {
 
     private Assignment whenFindingCurrentAssignmentForAccount(Account account, AssignmentEntity assignmentEntity) {
 
-        when(assignmentQueryRepository.findCurrentAssignmentByAccount(account.getId())).thenReturn(Optional.of(assignmentEntity));
+        when(assignmentQueryRepository.findFirstByAccountIdOrderByStartDateDesc(account.getId())).thenReturn(Optional.of(assignmentEntity));
 
         return assignmentQueryService.findCurrentAssignmentForAccount(account).get();
     }
@@ -57,6 +57,6 @@ public class AssignmentQueryServiceImplTest extends ServiceImplTest {
         assertThat(assignment.getAccount(), hasProperty("id", is(assignmentEntity.getAccount().getId())));
         assertThat(assignment, hasProperty("id", is(assignmentEntity.getId())));
 
-        verify(assignmentQueryRepository).findCurrentAssignmentByAccount(accountId);
+        verify(assignmentQueryRepository).findFirstByAccountIdOrderByStartDateDesc(accountId);
     }
 }

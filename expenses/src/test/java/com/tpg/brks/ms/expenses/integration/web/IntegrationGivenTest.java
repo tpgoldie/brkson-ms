@@ -1,14 +1,14 @@
 package com.tpg.brks.ms.expenses.integration.web;
 
 import com.tpg.brks.ms.expenses.domain.Account;
-import com.tpg.brks.ms.expenses.domain.Assignment;
 import com.tpg.brks.ms.expenses.domain.Given;
+import com.tpg.brks.ms.expenses.persistence.AccountIntegrationGiven;
+import com.tpg.brks.ms.expenses.persistence.AssignmentIntegrationGiven;
 import com.tpg.brks.ms.expenses.service.AccountQueryService;
 import com.tpg.brks.ms.expenses.service.AssignmentQueryService;
 import com.tpg.brks.ms.expenses.service.ExpenseQueryService;
 import com.tpg.brks.ms.expenses.service.ExpenseReportQueryService;
 import com.tpg.brks.ms.expenses.service.converters.AccountConverter;
-import com.tpg.brks.ms.expenses.service.converters.AssignmentConverter;
 import com.tpg.brks.ms.expenses.web.model.WebApplicationUser;
 import com.tpg.brks.ms.expenses.web.model.WebApplicationUserFixture;
 import org.junit.Before;
@@ -41,7 +41,7 @@ import static org.mockito.MockitoAnnotations.initMocks;
 @RunWith(SpringRunner.class)
 @AutoConfigureMockMvc
 @ActiveProfiles(profiles = {"int"})
-@Import(value = {AccountConverter.class})
+@Import(value = {AccountConverter.class, AccountIntegrationGiven.class, AssignmentIntegrationGiven.class})
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK,
     classes = {IntegrationGivenTest.TestConfig.class}, properties = {"spring.session.store-type=NONE"})
 public abstract class IntegrationGivenTest implements Given, WebApplicationUserFixture {
@@ -66,7 +66,10 @@ public abstract class IntegrationGivenTest implements Given, WebApplicationUserF
     protected MockMvc mockMvc;
 
     @Autowired
-    protected AssignmentQueryService assignmentQueryService;
+    protected AccountIntegrationGiven accountIntegrationGiven;
+
+    @Autowired
+    protected AssignmentIntegrationGiven assignmentIntegrationGiven;
 
     @MockBean
     protected AccountQueryService accountQueryService;
@@ -86,14 +89,7 @@ public abstract class IntegrationGivenTest implements Given, WebApplicationUserF
     }
 
     protected WebApplicationUser givenAWebApplicationUser() {
+
         return johnDoeWebAppUser();
-    }
-
-    protected void verifyAccountQuery(Account expectedAccount) {
-        verify(assignmentQueryService).findCurrentAssignmentForAccount(accountArgumentCaptor.capture());
-
-        Account actualAccount = accountArgumentCaptor.getValue();
-
-        assertThat(actualAccount, is(expectedAccount));
     }
 }

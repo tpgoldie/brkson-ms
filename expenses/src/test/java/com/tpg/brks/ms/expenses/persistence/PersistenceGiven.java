@@ -9,7 +9,7 @@ import java.util.List;
 
 import static com.tpg.brks.ms.expenses.domain.ExpenseType.SUBSISTENCE;
 
-public interface PeristenceGiven extends DateGeneration, AccountFixture, AssignmentFixture, ExpenseReportFixture, ExpenseFixture {
+public interface PersistenceGiven extends DateGeneration, AccountFixture, AssignmentFixture, ExpenseReportFixture, ExpenseFixture {
     Long ID = 101L;
 
     default AccountEntity givenAnAccountEntity() {

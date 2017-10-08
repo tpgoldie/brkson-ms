@@ -1,11 +1,10 @@
 package com.tpg.brks.ms.expenses.service.converters;
 
 import com.tpg.brks.ms.expenses.domain.Assignment;
-import com.tpg.brks.ms.expenses.persistence.PeristenceGiven;
+import com.tpg.brks.ms.expenses.persistence.PersistenceGiven;
 import com.tpg.brks.ms.expenses.persistence.entities.AccountEntity;
 import com.tpg.brks.ms.expenses.persistence.entities.AssignmentEntity;
 import com.tpg.brks.ms.expenses.service.DomainGiven;
-import com.tpg.brks.ms.expenses.service.converters.AccountConverter;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -13,7 +12,7 @@ import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
-public class AssignmentConverterTest implements PeristenceGiven, DomainGiven {
+public class AssignmentConverterTest implements PersistenceGiven, DomainGiven {
     private AssignmentConverter converter;
 
     @Before
