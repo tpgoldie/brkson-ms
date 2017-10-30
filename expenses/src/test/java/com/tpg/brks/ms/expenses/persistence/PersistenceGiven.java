@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.List;
 
 import static com.tpg.brks.ms.expenses.domain.ExpenseType.SUBSISTENCE;
+import static java.util.Collections.emptyList;
 
 public interface PersistenceGiven extends DateGeneration, AccountFixture, AssignmentFixture, ExpenseReportFixture, ExpenseFixture {
     Long ID = 101L;
@@ -27,19 +28,17 @@ public interface PersistenceGiven extends DateGeneration, AccountFixture, Assign
         return assignment;
     }
 
-    default ExpenseReportEntity givenAnExpenseReportEntity(AssignmentEntity assignmentEntity, List<ExpenseEntity> expenses) {
-        ExpenseReportEntity expenseReportEntity = anExpenseReport(assignmentEntity, "Report 1", expenses);
-        expenseReportEntity.setId(ID);
+    default ExpenseReportEntity givenAnExpenseReportEntity(AssignmentEntity assignmentEntity) {
+        Date start = generateDate(3, 11, 2016);
+        Date end = generateDate(2, 2, 2017);
 
-        return expenseReportEntity;
+        return anOpenExpenseReport(assignmentEntity, "Report 1", start, end);
     }
 
-    default ExpenseEntity givenAnExpenseEntity() {
+    default ExpenseEntity givenAnExpenseEntity(ExpenseReportEntity expenseReport) {
         Date expenseDate = generateDate(23, 6, 2016);
+        Date dateEntered = generateDate(25, 6, 2016);
 
-        ExpenseEntity expenseEntity = aPendingExpense("Expense 1", expenseDate, SUBSISTENCE, new BigDecimal(125.45));
-        expenseEntity.setId(ID);
-
-        return expenseEntity;
+        return aPendingExpense(expenseReport, "Expense 1", expenseDate, dateEntered, SUBSISTENCE, new BigDecimal(125.45));
     }
 }

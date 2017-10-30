@@ -1,7 +1,8 @@
-package com.tpg.brks.ms.expenses.persistence;
+package com.tpg.brks.ms.expenses.persistence.integration;
 
 import com.tpg.brks.ms.expenses.domain.Account;
 import com.tpg.brks.ms.expenses.domain.Assignment;
+import com.tpg.brks.ms.expenses.persistence.PersistenceGiven;
 import com.tpg.brks.ms.expenses.persistence.entities.AccountEntity;
 import com.tpg.brks.ms.expenses.persistence.entities.AssignmentEntity;
 import com.tpg.brks.ms.expenses.persistence.entities.AssignmentFixture;

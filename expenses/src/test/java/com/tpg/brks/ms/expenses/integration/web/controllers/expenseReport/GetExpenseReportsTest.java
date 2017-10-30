@@ -5,15 +5,19 @@ import com.tpg.brks.ms.expenses.domain.Assignment;
 import com.tpg.brks.ms.expenses.domain.ExpenseReport;
 import com.tpg.brks.ms.expenses.domain.Period;
 import com.tpg.brks.ms.expenses.integration.web.IntegrationGivenTest;
+import com.tpg.brks.ms.expenses.persistence.entities.AssignmentEntity;
 import com.tpg.brks.ms.expenses.web.model.WebApplicationUser;
 import org.junit.Test;
+import org.modelmapper.ModelMapper;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.ResultActions;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import static java.util.Collections.singletonList;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
@@ -28,6 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class GetExpenseReportsTest extends IntegrationGivenTest {
+    private ModelMapper modelMapper = new ModelMapper();
 
     @Test
     @WithUserDetails(value = "jdoe")
@@ -42,11 +47,13 @@ public class GetExpenseReportsTest extends IntegrationGivenTest {
         Date periodEnd = generateDate(15, 8, 2016);
         Period period = new Period("13/05/2016", "15/08/2016");
 
-        List<ExpenseReport> expenseReports = givenExpenseReports(assignment, periodStart, periodEnd);
+        AssignmentEntity assignmentEntity = modelMapper.map(assignment, AssignmentEntity.class);
+
+        List<ExpenseReport> expenseReports = singletonList(expenseReportIntegrationGiven.givenAnExpenseReport(assignmentEntity, periodStart, periodEnd));
 
         ResultActions resultActions = whenSendRequestForViewingExpenseReports(webApplicationUser, account, assignment, expenseReports);
 
-        thenExpectExpenseReports(resultActions, webApplicationUser, account, period, expenseReports);
+        thenExpectExpenseReports(resultActions, webApplicationUser, period, expenseReports);
     }
 
     private ResultActions whenSendRequestForViewingExpenseReports(WebApplicationUser webApplicationUser,
@@ -56,8 +63,6 @@ public class GetExpenseReportsTest extends IntegrationGivenTest {
 
         when(accountQueryService.findAccountByUsername(account.getUsername())).thenReturn(Optional.of(account));
 
-        when(expenseReportQueryService.getExpenseReportsForAssignment(assignment.getId())).thenReturn(expenseReports);
-
         return mockMvc.perform(get("/expenseReports")
                 .with(user(webApplicationUser))
             .contentType(HAL_JSON_VALUE))
@@ -66,7 +71,6 @@ public class GetExpenseReportsTest extends IntegrationGivenTest {
 
     private void thenExpectExpenseReports(ResultActions resultActions,
                                           WebApplicationUser webApplicationUser,
-                                          Account expectedAccount,
                                           Period period,
                                           List<ExpenseReport> expenseReports) throws Exception {
 

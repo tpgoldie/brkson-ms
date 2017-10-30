@@ -49,6 +49,8 @@ public class ExpenseReportQueryServiceImpl implements ExpenseReportQueryService,
 
     @Override
     public Optional<ExpenseReport> getExpenseReport(Long reportId) {
-        return null;
+        Optional<ExpenseReportEntity> reportEntity = expenseReportQueryRepository.findById(reportId);
+
+        return reportEntity.map(entity -> modelMapper.map(entity, ExpenseReport.class));
     }
 }

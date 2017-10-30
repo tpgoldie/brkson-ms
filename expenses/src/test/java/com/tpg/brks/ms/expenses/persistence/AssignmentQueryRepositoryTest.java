@@ -47,6 +47,7 @@ public class AssignmentQueryRepositoryTest extends RepositoryTest {
     }
 
     private AssignmentEntity whenFindingCurrentAssignmentByAccount(AccountEntity account, List<AssignmentEntity> assignments) {
+
         BooleanExpression predicate = QAssignmentEntity.assignmentEntity.account.id.eq(account.getId());
         Iterable<AssignmentEntity> found = assignmentQueryRepository.findAll(predicate);
 

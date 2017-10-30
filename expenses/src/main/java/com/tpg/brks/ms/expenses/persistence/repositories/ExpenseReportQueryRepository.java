@@ -10,4 +10,6 @@ import java.util.Optional;
 @Repository
 public interface ExpenseReportQueryRepository extends ExpenseReportRepository {
     List<ExpenseReportEntity> findByAssignmentId(@Param("assignmentId") Long assignmentId);
+
+    Optional<ExpenseReportEntity> findById(@Param("expenseReportId") Long expenseReportId);
 }

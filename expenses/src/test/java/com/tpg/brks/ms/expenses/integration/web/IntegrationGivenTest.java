@@ -2,10 +2,10 @@ package com.tpg.brks.ms.expenses.integration.web;
 
 import com.tpg.brks.ms.expenses.domain.Account;
 import com.tpg.brks.ms.expenses.domain.Given;
-import com.tpg.brks.ms.expenses.persistence.AccountIntegrationGiven;
-import com.tpg.brks.ms.expenses.persistence.AssignmentIntegrationGiven;
+import com.tpg.brks.ms.expenses.persistence.integration.AccountIntegrationGiven;
+import com.tpg.brks.ms.expenses.persistence.integration.AssignmentIntegrationGiven;
+import com.tpg.brks.ms.expenses.persistence.integration.ExpenseReportIntegrationGiven;
 import com.tpg.brks.ms.expenses.service.AccountQueryService;
-import com.tpg.brks.ms.expenses.service.AssignmentQueryService;
 import com.tpg.brks.ms.expenses.service.ExpenseQueryService;
 import com.tpg.brks.ms.expenses.service.ExpenseReportQueryService;
 import com.tpg.brks.ms.expenses.service.converters.AccountConverter;
@@ -41,7 +41,7 @@ import static org.mockito.MockitoAnnotations.initMocks;
 @RunWith(SpringRunner.class)
 @AutoConfigureMockMvc
 @ActiveProfiles(profiles = {"int"})
-@Import(value = {AccountConverter.class, AccountIntegrationGiven.class, AssignmentIntegrationGiven.class})
+@Import(value = {AccountConverter.class, AccountIntegrationGiven.class, AssignmentIntegrationGiven.class, ExpenseReportIntegrationGiven.class})
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK,
     classes = {IntegrationGivenTest.TestConfig.class}, properties = {"spring.session.store-type=NONE"})
 public abstract class IntegrationGivenTest implements Given, WebApplicationUserFixture {
@@ -71,11 +71,11 @@ public abstract class IntegrationGivenTest implements Given, WebApplicationUserF
     @Autowired
     protected AssignmentIntegrationGiven assignmentIntegrationGiven;
 
-    @MockBean
-    protected AccountQueryService accountQueryService;
+    @Autowired
+    protected ExpenseReportIntegrationGiven expenseReportIntegrationGiven;
 
     @MockBean
-    protected ExpenseReportQueryService expenseReportQueryService;
+    protected AccountQueryService accountQueryService;
 
     @MockBean
     protected ExpenseQueryService expenseQueryService;

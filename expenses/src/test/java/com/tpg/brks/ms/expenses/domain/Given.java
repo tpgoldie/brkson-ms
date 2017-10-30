@@ -22,15 +22,6 @@ public interface Given extends DateGeneration, AccountFixture, AssignmentFixture
                 generateDate(15, 4, 2017));
     }
 
-    default List<ExpenseReport> givenExpenseReports(Assignment assignment, Date periodStart, Date periodEnd) {
-        ExpenseReport report = aPendingExpenseReport(assignment, ID, "report 1", periodStart, periodEnd);
-
-        report.setExpenses(singletonList(aPendingExpense(report.getId(),"expense 1", generateDate(15, 4, 2017),
-                generateDate(13, 4, 2017), SUBSISTENCE, new BigDecimal("250.00"))));
-
-        return singletonList(report);
-    }
-
     default ExpenseReport givenAPendingExpenseReport(Assignment assignment, Date periodStart, Date periodEnd) {
         ExpenseReport report = aPendingExpenseReport(assignment, ID, "report 1", periodStart, periodEnd);
 

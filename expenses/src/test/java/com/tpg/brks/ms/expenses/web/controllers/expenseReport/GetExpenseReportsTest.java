@@ -13,6 +13,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import static java.util.Collections.singletonList;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
@@ -42,7 +43,7 @@ public class GetExpenseReportsTest extends ExpenseReportControllerTest {
         Date periodEnd = generateDate(15, 8, 2016);
         Period period = new Period("13/05/2016", "15/08/2016");
 
-        List<ExpenseReport> expenseReports = givenExpenseReports(assignment, periodStart, periodEnd);
+        List<ExpenseReport> expenseReports = singletonList(givenAPendingExpenseReport(assignment, periodStart, periodEnd));
 
         ResultActions resultActions = whenSendRequestForViewingExpenseReports(webApplicationUser, account, assignment, expenseReports);
 

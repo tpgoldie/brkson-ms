@@ -77,15 +77,16 @@ public abstract class RepositoryTest implements DateGeneration, AccountFixture, 
 
     protected ExpenseReportEntity givenAnExpenseReport(AssignmentEntity assignment, List<ExpenseEntity> expenses) {
 
-        ExpenseReportEntity report = anExpenseReport(assignment, "report 1", expenses);
+        ExpenseReportEntity report = anOpenExpenseReport(assignment, "report 1", expenses);
 
         return expenseReportLifecycleRepository.save(report);
     }
 
     protected ExpenseEntity givenAnExpense() {
         Date expenseDate = generateDate(10, 3, 2017);
+        Date dateEntered = generateDate(10, 4, 2017);
 
-        ExpenseEntity expense = aPendingExpense("lunch", expenseDate, SUBSISTENCE, new BigDecimal("23.75"));
+        ExpenseEntity expense = aPendingExpense(null, "lunch", expenseDate, dateEntered, SUBSISTENCE, new BigDecimal("23.75"));
 
         return expenseLifecycleRepository.save(expense);
     }

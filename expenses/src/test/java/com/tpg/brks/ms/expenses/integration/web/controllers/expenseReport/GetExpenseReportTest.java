@@ -47,8 +47,6 @@ public class GetExpenseReportTest extends IntegrationGivenTest {
     private ResultActions whenGettingExpenseReport(WebApplicationUser webApplicationUser,
                                                    ExpenseReport expenseReport) throws Exception {
 
-        when(expenseReportQueryService.getExpenseReport(expenseReport.getId())).thenReturn(of(expenseReport));
-
         return mockMvc.perform(get("/expenseReports/{reportId}", expenseReport.getId())
                 .with(user(webApplicationUser))
             .contentType(HAL_JSON))
@@ -56,8 +54,8 @@ public class GetExpenseReportTest extends IntegrationGivenTest {
     }
 
     private void thenExpectExpenseReport(ResultActions resultActions, WebApplicationUser webApplicationUser,
-                                                Period period,
-                                                ExpenseReport expenseReport) throws Exception {
+                                        Period period,
+                                        ExpenseReport expenseReport) throws Exception {
 
         Expense actualExpense = expenseReport.getExpenses().get(0);
 
@@ -75,7 +73,5 @@ public class GetExpenseReportTest extends IntegrationGivenTest {
             .andExpect(jsonPath("$.expenses[0].id", is(actualExpense.getId().intValue())))
             .andExpect(jsonPath("$.expenses[0].description", is(actualExpense.getDescription())))
             .andExpect(jsonPath("$.expenses[0].amount", is(actualExpense.getAmount().doubleValue())));
-
-        verify(expenseReportQueryService).getExpenseReport(expenseReport.getId());
     }
 }
