@@ -28,15 +28,6 @@
 		    <artifactId>lombok</artifactId>
 		    <version>1.16.18</version>
 		</dependency>
-
-
-        <!--<dependency>-->
-            <!--<groupId>com.mysema.querydsl</groupId>-->
-            <!--<artifactId>querydsl-apt</artifactId>-->
-            <!--<version>3.7.4</version>-->
-            <!--<scope>provided</scope>-->
-        <!--</dependency>-->
-
         <dependency>
             <groupId>com.querydsl</groupId>
             <artifactId>querydsl-apt</artifactId>
@@ -49,7 +40,12 @@
             <version>${querydsl.version}</version>
         </dependency>
     </dependencies>
-
+    <dependency>
+        <groupId>com.h2database</groupId>
+        <artifactId>h2</artifactId>
+        <scope>test</scope>
+        <version>${h2.version}</version>
+    </dependency>
     <build>
         <plugins>
             <plugin>

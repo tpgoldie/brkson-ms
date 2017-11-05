@@ -13,17 +13,17 @@ import static java.util.Collections.singletonList;
 public interface ExpenseFixture {
     default ExpenseEntity anExpense(String description, Date expenseDate, Date dateEntered, ExpenseStatus status, ExpenseType expenseType,
                                     BigDecimal amount) {
-        ExpenseEntity entity = ExpenseEntity.builder()
-            .dateEntered(new Date())
-            .expenseDate(expenseDate)
-            .dateEntered(dateEntered)
-            .status(status)
-            .expenseType(expenseType)
-            .amount(amount)
-            .build();
+        ExpenseEntity entity = new ExpenseEntity();
 
-            entity.setDescription(description);
-            return entity;
+        entity.setExpenseDate(expenseDate);
+        entity.setDateEntered(dateEntered);
+        entity.setStatus(status);
+        entity.setExpenseType(expenseType);
+        entity.setAmount(amount);
+
+        entity.setDescription(description);
+
+        return entity;
     }
 
     default ExpenseEntity aPendingExpense(ExpenseReportEntity report, String description, Date expenseDate, Date dateEntered,
@@ -31,6 +31,7 @@ public interface ExpenseFixture {
         ExpenseEntity expense = anExpense(description, expenseDate, dateEntered, PENDING, expenseType, amount);
         expense.setExpenseReports(singletonList(report));
 
+        expense.setAttachedFilename("filename_1.txt");
         return expense;
     }
 }

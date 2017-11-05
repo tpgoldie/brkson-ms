@@ -1,12 +1,13 @@
 package com.tpg.brks.ms.expenses.domain;
 
+import com.tpg.brks.ms.expenses.utils.DateFormatting;
 import com.tpg.brks.ms.expenses.utils.DateGeneration;
 
 import java.util.Date;
 
 import static com.tpg.brks.ms.expenses.domain.ExpenseReportStatus.PENDING;
 
-public interface ExpenseReportFixture extends DateGeneration {
+public interface ExpenseReportFixture extends DateFormatting {
     default ExpenseReport anExpenseReport(Assignment assignment, Long id, String description, Date periodStart,
                                           Date periodEnd, ExpenseReportStatus status) {
         ExpenseReport expenseReport = new ExpenseReport();

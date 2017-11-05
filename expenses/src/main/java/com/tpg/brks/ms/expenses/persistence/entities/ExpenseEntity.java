@@ -17,9 +17,10 @@ import java.util.List;
 @Entity(name = "expense")
 @Getter
 @Setter
-@Builder
 @SequenceGenerator( name = "seq_generator", sequenceName = "expenses_seq" )
 public class ExpenseEntity extends DescriptionEntity {
+    public ExpenseEntity() {}
+
     @ManyToMany
     @JoinTable(name = "expense_reports_expenses_tbl",
         joinColumns = @JoinColumn(name = "expense_report_id"),

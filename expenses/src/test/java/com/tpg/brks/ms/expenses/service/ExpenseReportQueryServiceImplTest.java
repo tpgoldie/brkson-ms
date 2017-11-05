@@ -7,6 +7,7 @@ import com.tpg.brks.ms.expenses.persistence.entities.AssignmentEntity;
 import com.tpg.brks.ms.expenses.persistence.entities.ExpenseEntity;
 import com.tpg.brks.ms.expenses.persistence.entities.ExpenseReportEntity;
 import com.tpg.brks.ms.expenses.persistence.repositories.ExpenseReportQueryRepository;
+import com.tpg.brks.ms.expenses.utils.DateFormatting;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -25,7 +26,7 @@ import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
-public class ExpenseReportQueryServiceImplTest implements PersistenceGiven {
+public class ExpenseReportQueryServiceImplTest implements PersistenceGiven, DateFormatting {
 
     @Mock
     private ExpenseReportQueryRepository expenseReportQueryRepository;

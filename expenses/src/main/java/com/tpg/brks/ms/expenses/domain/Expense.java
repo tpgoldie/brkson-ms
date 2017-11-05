@@ -21,4 +21,6 @@ public class Expense extends Identifier {
     private ExpenseStatus status;
 
     private BigDecimal amount;
+
+    private String attachedFilename;
 }

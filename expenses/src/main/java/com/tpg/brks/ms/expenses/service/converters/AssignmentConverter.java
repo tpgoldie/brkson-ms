@@ -2,8 +2,10 @@ package com.tpg.brks.ms.expenses.service.converters;
 
 import com.tpg.brks.ms.expenses.domain.Account;
 import com.tpg.brks.ms.expenses.domain.Assignment;
+import com.tpg.brks.ms.expenses.domain.ExpenseReport;
 import com.tpg.brks.ms.expenses.persistence.entities.AccountEntity;
 import com.tpg.brks.ms.expenses.persistence.entities.AssignmentEntity;
+import com.tpg.brks.ms.expenses.persistence.entities.ExpenseReportEntity;
 import org.modelmapper.Converter;
 import org.modelmapper.TypeMap;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +27,11 @@ public class AssignmentConverter extends DomainConverter implements AssignmentCo
 
         typeMap.addMappings(modelMapper -> modelMapper.using(entityToDomainConverter)
                 .map(AssignmentEntity::getAccount, Assignment::setAccount));
+
+        Converter<AccountEntity, Account> accountEntityToDto =
+                ctx -> ctx.getSource() == null ? null : accountConverting.convert(ctx.getSource());
+
+        typeMap.addMappings(mapper -> mapper.using(accountEntityToDto).map(AssignmentEntity::getAccount, Assignment::setAccount));
     }
 
     @Override

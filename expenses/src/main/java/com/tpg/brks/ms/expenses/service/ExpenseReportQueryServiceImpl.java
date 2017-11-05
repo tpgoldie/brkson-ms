@@ -3,6 +3,7 @@ package com.tpg.brks.ms.expenses.service;
 import com.tpg.brks.ms.expenses.domain.ExpenseReport;
 import com.tpg.brks.ms.expenses.persistence.entities.ExpenseReportEntity;
 import com.tpg.brks.ms.expenses.persistence.repositories.ExpenseReportQueryRepository;
+import com.tpg.brks.ms.expenses.utils.DateFormatting;
 import com.tpg.brks.ms.expenses.utils.DateGeneration;
 import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
@@ -17,7 +18,7 @@ import java.util.Optional;
 import static java.util.stream.Collectors.toList;
 
 @Service
-public class ExpenseReportQueryServiceImpl implements ExpenseReportQueryService, DateGeneration {
+public class ExpenseReportQueryServiceImpl implements ExpenseReportQueryService, DateFormatting {
 
     private final ExpenseReportQueryRepository expenseReportQueryRepository;
 

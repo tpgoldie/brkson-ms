@@ -14,11 +14,13 @@ import java.util.List;
 
 @Table(name = "expense_reports_tbl", schema = "brks_expenses")
 @Entity(name = "expenseReport")
-@Builder
 @Getter
 @Setter
 @SequenceGenerator( name = "seq_generator", sequenceName = "expense_reports_seq" )
 public class ExpenseReportEntity extends DescriptionEntity {
+
+    public ExpenseReportEntity() {}
+
     @NotNull
     @ManyToOne
     @JoinTable(name = "assignments_expense_reports_tbl",

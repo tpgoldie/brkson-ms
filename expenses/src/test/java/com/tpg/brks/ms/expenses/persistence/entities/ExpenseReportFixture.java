@@ -18,12 +18,11 @@ public interface ExpenseReportFixture {
         period.setStartDate(sortedExpenses.get(0).getExpenseDate());
         period.setEndDate(sortedExpenses.get(sortedExpenses.size() - 1).getExpenseDate());
 
-        ExpenseReportEntity entity = ExpenseReportEntity.builder()
-            .assignment(assignment)
-            .expenses(expenses)
-            .period(period)
-            .status(OPEN)
-            .build();
+        ExpenseReportEntity entity = new ExpenseReportEntity();
+        entity.setAssignment(assignment);
+        entity.setExpenses(expenses);
+        entity.setPeriod(period);
+        entity.setStatus(OPEN);
 
         entity.setDescription(descripton);
 
@@ -37,12 +36,11 @@ public interface ExpenseReportFixture {
         period.setStartDate(periodStart);
         period.setEndDate(periodEnd);
 
-        ExpenseReportEntity entity = ExpenseReportEntity.builder()
-            .assignment(assignment)
-            .expenses(emptyList())
-            .period(period)
-            .status(OPEN)
-            .build();
+        ExpenseReportEntity entity = new ExpenseReportEntity();
+        entity.setAssignment(assignment);
+        entity.setExpenses(emptyList());
+        entity.setPeriod(period);
+        entity.setStatus(OPEN);
 
         entity.setDescription(descripton);
 
