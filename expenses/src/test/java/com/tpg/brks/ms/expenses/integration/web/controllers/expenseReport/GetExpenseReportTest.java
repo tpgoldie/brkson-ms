@@ -1,77 +1,57 @@
 package com.tpg.brks.ms.expenses.integration.web.controllers.expenseReport;
 
-import com.tpg.brks.ms.expenses.domain.*;
-import com.tpg.brks.ms.expenses.integration.web.IntegrationGivenTest;
+import com.tpg.brks.ms.expenses.domain.Account;
+import com.tpg.brks.ms.expenses.domain.Assignment;
+import com.tpg.brks.ms.expenses.domain.ExpenseReport;
+import com.tpg.brks.ms.expenses.integration.web.HttpResponseFixture;
+import com.tpg.brks.ms.expenses.integration.web.IntegrationTest;
+import com.tpg.brks.ms.expenses.persistence.entities.AccountEntity;
+import com.tpg.brks.ms.expenses.persistence.entities.AssignmentEntity;
+import com.tpg.brks.ms.expenses.persistence.entities.ExpenseReportEntity;
+import com.tpg.brks.ms.expenses.persistence.integration.Pair;
+import com.tpg.brks.ms.expenses.utils.DateGeneration;
 import com.tpg.brks.ms.expenses.web.model.WebApplicationUser;
+import com.tpg.brks.ms.expenses.web.resources.ExpenseReportResource;
 import org.junit.Test;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.test.context.support.WithUserDetails;
-import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.Date;
 
-import static java.util.Optional.of;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static org.springframework.hateoas.MediaTypes.HAL_JSON;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
-import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static com.tpg.brks.ms.expenses.integration.web.controllers.expenseReport.GetExpenseReportExpectation.then;
+import static org.springframework.http.HttpMethod.GET;
 
-public class GetExpenseReportTest extends IntegrationGivenTest {
+public class GetExpenseReportTest extends IntegrationTest implements DateGeneration, HttpResponseFixture {
 
     @Test
     @WithUserDetails(value = "jdoe")
     public void getExpenseReport_getRequest_shouldReturnExpenseReport() throws Exception {
         WebApplicationUser webApplicationUser = givenAWebApplicationUser();
 
-        Account account = givenAnAccount();
+        Pair<AccountEntity, Account> accountPair = accountIntegrationGiven.givenAnAccount();
 
-        Assignment assignment = givenAnAssignment(account);
+        Pair<AssignmentEntity, Assignment> pair = assignmentIntegrationGiven.givenACurrentAssignment(accountPair.getSecond());
 
         Date periodStart = generateDate(13, 5, 2016);
         Date periodEnd = generateDate(15, 8, 2016);
-        Period period = new Period("13/05/2016", "15/08/2016");
 
-        ExpenseReport expenseReport = givenAPendingExpenseReport(assignment, periodStart, periodEnd);
+        Pair<ExpenseReportEntity, ExpenseReport> expenseReportPair = expenseReportIntegrationGiven.givenAnExpenseReport(pair.getFirst(), periodStart, periodEnd);
 
-        ResultActions resultActions = whenGettingExpenseReport(webApplicationUser, expenseReport);
+        ResponseEntity<ExpenseReportResource> actual = whenGettingExpenseReport(expenseReportPair.getSecond());
 
-        thenExpectExpenseReport(resultActions, webApplicationUser, period, expenseReport);
+        then()
+            .expectResponse(actual)
+                .status(isOk())
+            .and()
+                .contentIs(expenseReportPair.getSecond());
     }
 
-    private ResultActions whenGettingExpenseReport(WebApplicationUser webApplicationUser,
-                                                   ExpenseReport expenseReport) throws Exception {
+    private ResponseEntity<ExpenseReportResource> whenGettingExpenseReport(ExpenseReport expenseReport) throws Exception {
 
-        return mockMvc.perform(get("/expenseReports/{reportId}", expenseReport.getId())
-                .with(user(webApplicationUser))
-            .contentType(HAL_JSON))
-            .andDo(print());
-    }
+        HttpEntity<String> entity = new HttpEntity<>(null, httpHeaders);
 
-    private void thenExpectExpenseReport(ResultActions resultActions, WebApplicationUser webApplicationUser,
-                                        Period period,
-                                        ExpenseReport expenseReport) throws Exception {
-
-        Expense actualExpense = expenseReport.getExpenses().get(0);
-
-        resultActions
-            .andExpect(status().isOk())
-            .andExpect(authenticated()
-                .withUsername(webApplicationUser.getUsername())
-                .withRoles("EXPENSE_USER"))
-            .andExpect(jsonPath("$.id", is(expenseReport.getId().intValue())))
-            .andExpect(jsonPath("$.description", is(expenseReport.getDescription())))
-            .andExpect(jsonPath("$.periodStart", is(period.getPeriodStart())))
-            .andExpect(jsonPath("$.periodEnd", is(period.getPeriodEnd())))
-            .andExpect(jsonPath("$.status", is(expenseReport.getStatus().name())))
-            .andExpect(jsonPath("$.expenses", hasSize(1)))
-            .andExpect(jsonPath("$.expenses[0].id", is(actualExpense.getId().intValue())))
-            .andExpect(jsonPath("$.expenses[0].description", is(actualExpense.getDescription())))
-            .andExpect(jsonPath("$.expenses[0].amount", is(actualExpense.getAmount().doubleValue())));
+        return restTemplate.exchange(createUrl(String.format("/expenseReports/%d", expenseReport.getId())), GET, entity,
+                ExpenseReportResource.class);
     }
 }

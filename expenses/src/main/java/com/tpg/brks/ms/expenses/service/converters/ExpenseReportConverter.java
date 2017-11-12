@@ -11,10 +11,12 @@ import com.tpg.brks.ms.expenses.utils.DateFormatting;
 import org.modelmapper.Converter;
 import org.modelmapper.TypeMap;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
 
 public class ExpenseReportConverter extends DomainConverter implements ExpenseReportConverting, DateFormatting {
@@ -45,7 +47,7 @@ public class ExpenseReportConverter extends DomainConverter implements ExpenseRe
         expenseConverter = new ExpenseConverter();
 
         Converter<List<ExpenseEntity>, List<Expense>> expenseEntityToDto =
-                ctx -> ctx.getSource() == null ? null : ctx.getSource().stream().map(e -> expenseConverter.convert(e)).collect(toList());
+                ctx -> ctx.getSource() == null ? emptyList() : ctx.getSource().stream().map(e -> expenseConverter.convert(e)).collect(toList());
 
         typeMap.addMappings(mapper -> mapper.using(expenseEntityToDto).map(ExpenseReportEntity::getExpenses, ExpenseReport::setExpenses));
     }

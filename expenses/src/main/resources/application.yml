@@ -1,0 +1,24 @@
+spring.thymeleaf.cache: false
+
+debug: true
+
+security:
+  basic.enabled: false
+
+jdbc:
+  url: jdbc:postgresql://localhost/brks_db
+  username: brks_user_admin
+  password: brks_user_app_db
+  driver: org.postgresql.Driver
+
+liquibase:
+  changeLog: classpath:/db/changelog/db/changelog-master.xml
+
+hibernate:
+  id.new_generator_mappings: true
+
+user.details.service:
+  client:
+    rootUri: https://localhost:8443/users
+    connectionTimeout: 30000
+    readTimeout: 30000

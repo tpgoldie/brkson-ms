@@ -5,7 +5,10 @@ import com.tpg.brks.ms.expenses.domain.Assignment;
 import com.tpg.brks.ms.expenses.domain.ExpenseReport;
 import com.tpg.brks.ms.expenses.domain.Period;
 import com.tpg.brks.ms.expenses.integration.web.IntegrationGivenTest;
+import com.tpg.brks.ms.expenses.persistence.entities.AccountEntity;
 import com.tpg.brks.ms.expenses.persistence.entities.AssignmentEntity;
+import com.tpg.brks.ms.expenses.persistence.entities.ExpenseReportEntity;
+import com.tpg.brks.ms.expenses.persistence.integration.Pair;
 import com.tpg.brks.ms.expenses.web.model.WebApplicationUser;
 import org.junit.Test;
 import org.modelmapper.ModelMapper;
@@ -32,6 +35,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class GetExpenseReportsTest extends IntegrationGivenTest {
+
     private ModelMapper modelMapper = new ModelMapper();
 
     @Test
@@ -39,19 +43,22 @@ public class GetExpenseReportsTest extends IntegrationGivenTest {
     public void getExpenseReports_getRequest_shouldReturnExpenseReports() throws Exception {
         WebApplicationUser webApplicationUser = givenAWebApplicationUser();
 
-        Account account = accountIntegrationGiven.givenAnAccount();
+        Pair<AccountEntity, Account> accountPair = accountIntegrationGiven.givenAnAccount();
 
-        Assignment assignment = assignmentIntegrationGiven.givenACurrentAssignment(account);
+        Pair<AssignmentEntity, Assignment> assignmentPair = assignmentIntegrationGiven.givenACurrentAssignment(accountPair.getSecond());
 
         Date periodStart = generateDate(13, 5, 2016);
         Date periodEnd = generateDate(15, 8, 2016);
         Period period = new Period("13/05/2016", "15/08/2016");
 
-        AssignmentEntity assignmentEntity = modelMapper.map(assignment, AssignmentEntity.class);
+        AssignmentEntity assignmentEntity = modelMapper.map(assignmentPair.getSecond(), AssignmentEntity.class);
 
-        List<ExpenseReport> expenseReports = singletonList(expenseReportIntegrationGiven.givenAnExpenseReport(assignmentEntity, periodStart, periodEnd));
+        Pair<ExpenseReportEntity, ExpenseReport> expenseReportPair = expenseReportIntegrationGiven.givenAnExpenseReport(assignmentEntity, periodStart, periodEnd);
 
-        ResultActions resultActions = whenSendRequestForViewingExpenseReports(webApplicationUser, account, assignment, expenseReports);
+        List<ExpenseReport> expenseReports = singletonList(expenseReportPair.getSecond());
+
+        ResultActions resultActions = whenSendRequestForViewingExpenseReports(webApplicationUser, accountPair.getSecond(),
+                assignmentPair.getSecond(), expenseReports);
 
         thenExpectExpenseReports(resultActions, webApplicationUser, period, expenseReports);
     }

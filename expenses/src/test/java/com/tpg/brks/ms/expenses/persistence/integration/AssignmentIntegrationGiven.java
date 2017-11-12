@@ -10,9 +10,12 @@ import com.tpg.brks.ms.expenses.persistence.repositories.AssignmentLifecycleRepo
 import com.tpg.brks.ms.expenses.persistence.repositories.AssignmentQueryRepository;
 import com.tpg.brks.ms.expenses.service.AssignmentQueryService;
 import com.tpg.brks.ms.expenses.utils.DateGeneration;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.Value;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 
 import java.util.Date;
 
@@ -29,15 +32,17 @@ public class AssignmentIntegrationGiven implements DateGeneration, PersistenceGi
     @Autowired
     private AssignmentQueryService assignmentQueryService;
 
-    public Assignment givenACurrentAssignment(Account account) {
+    public Pair<AssignmentEntity, Assignment> givenACurrentAssignment(Account account) {
         Date startDate = generateDate(23, 1, 2016);
 
         AccountEntity accountEntity = modelMapper.map(account, AccountEntity.class);
 
         AssignmentEntity assignmentEntity = anOpenAssignment(accountEntity, "open assignment",startDate);
 
-        assignmentLifecycleRepository.save(assignmentEntity);
+        assignmentEntity = assignmentLifecycleRepository.save(assignmentEntity);
 
-        return assignmentQueryService.findCurrentAssignmentForAccount(account).get();
+        Assignment assignment = assignmentQueryService.findCurrentAssignmentForAccount(account).get();
+
+        return new Pair<>(assignmentEntity, assignment);
     }
 }

@@ -5,12 +5,15 @@ import com.tpg.brks.ms.expenses.domain.ExpenseReportStatus;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Fetch;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import static javax.persistence.FetchType.EAGER;
 
 @Table(name = "expense_reports_tbl", schema = "brks_expenses")
 @Entity(name = "expenseReport")
@@ -29,8 +32,8 @@ public class ExpenseReportEntity extends DescriptionEntity {
     )
     private AssignmentEntity assignment;
 
-    @ManyToMany(mappedBy = "expenseReports")
-    private List<ExpenseEntity> expenses = new ArrayList<>();
+    @ManyToMany(mappedBy = "expenseReports", fetch = EAGER)
+    private List<ExpenseEntity> expenses;
 
 
     @Embedded

@@ -17,10 +17,13 @@ public class AccountIntegrationGiven implements PersistenceGiven {
     @Autowired
     private AccountLifecycleRepository accountLifecycleRepository;
 
-    public Account givenAnAccount() {
+    public Pair<AccountEntity, Account> givenAnAccount() {
         AccountEntity entity = anOpenAccount("John", "Doe", "jdoe");
+
         entity = accountLifecycleRepository.save(entity);
 
-        return modelMapper.map(entity, Account.class);
+        Account dto = modelMapper.map(entity, Account.class);
+
+        return new Pair<>(entity, dto);
     }
 }

@@ -48,6 +48,7 @@ public class ExpenseReportQueryRepositoryTest extends RepositoryTest implements 
                 is(expectedReport.getAssignment().getDescription())));
 
         assertThat(actualReport.getExpenses(), hasSize(1));
+
         assertThat(actualReport.getExpenses().get(0),
                 hasProperty("id", is(expectedReport.getExpenses().get(0).getId())));
     }

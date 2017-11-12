@@ -22,7 +22,7 @@ public class ExpenseEntity extends DescriptionEntity {
     public ExpenseEntity() {}
 
     @ManyToMany
-    @JoinTable(name = "expense_reports_expenses_tbl",
+    @JoinTable(name = "brks_expenses.expense_reports_expenses_tbl",
         joinColumns = @JoinColumn(name = "expense_report_id"),
         inverseJoinColumns = @JoinColumn(name = "expense_id")
     )

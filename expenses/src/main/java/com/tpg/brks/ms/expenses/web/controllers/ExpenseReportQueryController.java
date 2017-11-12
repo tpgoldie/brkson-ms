@@ -44,6 +44,7 @@ public class ExpenseReportQueryController {
     @Autowired
     public ExpenseReportQueryController(AssignmentQueryService assignmentQueryService, AccountQueryService accountQueryService,
                                         ExpenseReportQueryService expenseReportQueryService, ExpenseReportResourceAssembly expenseReportResourceAssembly) {
+
         this.assignmentQueryService = assignmentQueryService;
 
         this.expenseReportQueryService = expenseReportQueryService;
@@ -79,7 +80,7 @@ public class ExpenseReportQueryController {
         return ResponseEntity.ok(resources);
     }
 
-    @GetMapping(value = "/expenseReports/{reportId}", produces = {HAL_JSON_VALUE})
+    @GetMapping(value = "/expenseReports/{reportId}", consumes = {HAL_JSON_VALUE}, produces = {HAL_JSON_VALUE})
     @Secured("ROLE_EXPENSE_USER")
     @PreAuthorize("authenticated")
     public ResponseEntity<ExpenseReportResource> getExpenseReport(@AuthenticationPrincipal  WebApplicationUser webApplicationUser,

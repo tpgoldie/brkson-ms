@@ -68,8 +68,6 @@ public class ExpenseReportQueryServiceImplTest implements PersistenceGiven, Date
         then()
             .expectExpenseReportQueryRepository(expenseReportQueryRepository)
                 .toFindExpenseReportById(expenseEntity.getId());
-//        .and()
-//            .assertExpenseReport(actual);
 
         assertThat(actual.getAssignment().getDescription(), is(assignmentEntity.getDescription()));
     }
